@@ -25,6 +25,8 @@ class Player {
         this.jumped = false;
         this.dodged = false;
         this.slowAfterDodge = false;
+        this.attacking = false;
+        this.attackDuration = 0.5;
         this.state = "idle";
         this.animState = "idle";
     }
@@ -80,9 +82,16 @@ class Player {
     playerInput() {
         if (isButtonPressed("dodge") && !this.slowAfterDodge) {
             this.dodged = true;
-            wait(this.dodgingTime, () => {
+            wait(this.dodgingTime, () => { //name this dodge duration
                 this.dodged = false; 
                 this.slowAfterDodge = true; //player stay on air for few secs
+            })
+        }
+        if (isButtonPressed("attack") && !this.attacking) {
+            console.log("attacked");
+            this.attacking = true;
+            wait(this.attackDuration, () => {
+                this.attacking = false;
             })
         }
         if (isButtonDown("jump") && this.gameObj.isGrounded()) {
@@ -145,9 +154,18 @@ class Player {
             return;
         }
 
+        //playerattack
+        if (this.attacking) {
+            this.attack();
+        }
+
         //move player based on movex
         this.gameObj.vel = vec2(this.moveX, this.gameObj.vel.y);
 
+    }
+
+    attack() {
+        console.log("attacking");
     }
     
     playerDodge() {
