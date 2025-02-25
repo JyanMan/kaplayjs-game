@@ -16,20 +16,21 @@ class Player {
         this.jumped = false;
         this.dodged = false;
         this.state = "idle";
+        this.animState = "idle";
     }
     
     makePlayer() {
         this.gameObj = add([
-            sprite("player", { anim: "idle" }),
+            sprite("player", { anim: this.animState }),
             scale(4),
             pos(this.pos),
             area({ shape: new Rect(vec2(this.width/2, this.height/2), this.width, this.height)}),
             body(),
             "player"
         ]); 
-        
+
+        //stuff called at the start
         this.gameObj.jumpForce = this.jumpForce;
-        this.animState = this.gameObj.getCurAnim().name;
     }
 
     update() {
