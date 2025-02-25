@@ -27,6 +27,6 @@ export const levelOne = () => {
         player.fixedUpdate();
     });
     
-    setGravity(1000);
+    setGravity(1200);
     start();
 }

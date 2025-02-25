@@ -1,3 +1,5 @@
+import { vec2Product } from "../utils/vector2.js";
+
 class Player {
     constructor(
         initialX,
@@ -11,10 +13,15 @@ class Player {
         this.width = 15;
         this.height = 21.5;
 
+        this.dodgingTime = 0.1;
+        this.dodgeRadius = 200;
+        this.dodgeMin = 100
+
         //USE STATES INSTEAD
         this.isRunning = false;
         this.jumped = false;
         this.dodged = false;
+        this.dodgeLerp = false;
         this.state = "idle";
         this.animState = "idle";
     }
@@ -24,6 +31,8 @@ class Player {
             sprite("player", { anim: this.animState }),
             scale(4),
             pos(this.pos),
+            //FIX THIS AREA, ITS NOT PROPERLY OFFSET
+            //COULD FIX SPRITESHEET INSTEAD
             area({ shape: new Rect(vec2(this.width/2, this.height/2), this.width, this.height)}),
             body(),
             "player"
@@ -31,11 +40,25 @@ class Player {
 
         //stuff called at the start
         this.gameObj.jumpForce = this.jumpForce;
-    }
 
+    }
+    
     update() {
         this.playerInput();
         this.playerAnimate();
+
+        //console.log(this.gameObj.scale);
+        //draw collider for testing
+        drawRect({
+            width: this.width*this.gameObj.scale.x,
+            height: this.height*this.gameObj.scale.y,
+            pos: this.gameObj.pos.add(
+                this.width*this.gameObj.scale.x/2,
+                this.height*this.gameObj.scale.y/2
+            ),
+            color: YELLOW,
+            fill: true
+        })
     }
 
     fixedUpdate() {
@@ -43,16 +66,18 @@ class Player {
     }
 
     playerInput() {
-        if (isButtonPressed("dodge")) {
+        if (isButtonPressed("dodge") && !this.dodgeLerp) {
             this.dodged = true;
-            this.state = "dodging";
+            wait(this.dodgingTime, () => {
+                this.dodged = false;
+                this.dodgeLerp = true;
+            })
         }
         if (isButtonDown("jump") && this.gameObj.isGrounded()) {
             this.jumped = true;
-            this.state = "jumped";
         }
         if (isButtonDown("right") || isButtonDown("left")) {
-            this.state = "running";
+            
             this.isRunning = true;
         }
         else {
@@ -61,6 +86,8 @@ class Player {
     }
 
     playerMove() {
+
+        //LEFT AND RIGHT MOVEMENT
         let accel = this.accel;
         if (this.isRunning) {
             if (!this.gameObj.isGrounded()) {
@@ -87,22 +114,66 @@ class Player {
         if (Math.abs(this.moveX) >= this.speed) {
             this.moveX = Math.sign(this.moveX)*this.speed;
         }
-
+        
+        //JUMP
         if (this.jumped) {
             this.gameObj.jump();
             this.jumped = false;
         }
-
-        this.gameObj.vel = vec2(this.moveX, this.gameObj.vel.y);
-
+        
+        //DODGE
         if (this.dodged) {
             this.playerDodge();
-            this.dodged = false;
+            return;
         }
-    }
+        else if (this.dodgeLerp) {
+            this.gameObj.vel = vec2Product(this.gameObj.vel, 0.8);
+            wait(0.2, () => {
+                this.dodgeLerp = false;
+            })
+            return;
+        }
+        this.gameObj.vel = vec2(this.moveX, this.gameObj.vel.y);
 
+    }
+    
     playerDodge() {
-        console.log('dodged');
+        const selfCenter = this.gameObj.pos.add(
+            this.width*this.gameObj.scale.x, 
+            this.height*this.gameObj.scale.y
+        );
+        // const selfCenter = this.gameObj.pos
+        let mouseDelta = mousePos().sub(selfCenter);
+        const mouseDeltaLen = mouseDelta.len();
+        const mouseDir = vec2(mouseDelta.x/mouseDeltaLen, mouseDelta.y/mouseDeltaLen);
+        //console.log(mouseDelta);
+
+        //limit dodge
+        if (mouseDeltaLen <= this.dodgeMin) {
+            mouseDelta = vec2(
+                mouseDir.x*this.dodgeMin,
+                mouseDir.y*this.dodgeMin
+            );
+        }
+        if (mouseDeltaLen >= this.dodgeRadius) {
+            mouseDelta = vec2(
+                mouseDir.x*this.dodgeRadius,
+                mouseDir.y*this.dodgeRadius
+            );
+            console.log(mouseDelta)
+        }
+
+        //move player
+        this.moveX = 0;
+        this.gameObj.vel = vec2(0, 0);
+        this.gameObj.vel = vec2Product(mouseDelta, 8);
+
+        //for debugging purposes
+        drawCircle({
+            pos: mouseDelta.add(selfCenter),
+            radius: 20,
+            color: GREEN
+        });
     }
 
     playerAnimate() {
