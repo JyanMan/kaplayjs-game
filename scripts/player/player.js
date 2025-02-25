@@ -1,4 +1,5 @@
 import { vec2Product } from "../utils/vector2.js";
+import { normalizeVec } from "../utils/vector2.js";
 
 class Player {
     constructor(
@@ -15,13 +16,15 @@ class Player {
 
         this.dodgingTime = 0.1;
         this.dodgeRadius = 200;
-        this.dodgeMin = 100
+        this.dodgeMin = 100;
+        this.dodgeSlowTime = 0.2;
 
         //USE STATES INSTEAD
         this.isRunning = false;
+        this.runDirection = "right";
         this.jumped = false;
         this.dodged = false;
-        this.dodgeLerp = false;
+        this.slowAfterDodge = false;
         this.state = "idle";
         this.animState = "idle";
     }
@@ -42,13 +45,8 @@ class Player {
         this.gameObj.jumpForce = this.jumpForce;
 
     }
-    
-    update() {
-        this.playerInput();
-        this.playerAnimate();
 
-        //console.log(this.gameObj.scale);
-        //draw collider for testing
+    draw() {
         drawRect({
             width: this.width*this.gameObj.scale.x,
             height: this.height*this.gameObj.scale.y,
@@ -60,23 +58,35 @@ class Player {
             fill: true
         })
     }
+    
+    update() {
+        this.playerInput();
+        this.playerAnimate();
+
+        //console.log(this.gameObj.scale);
+        //draw collider for testing
+        //organize debugs or draws
+        this.draw();
+    }
 
     fixedUpdate() {
         this.playerMove();
     }
 
     playerInput() {
-        if (isButtonPressed("dodge") && !this.dodgeLerp) {
+        if (isButtonPressed("dodge") && !this.slowAfterDodge) {
             this.dodged = true;
             wait(this.dodgingTime, () => {
                 this.dodged = false; 
-                this.dodgeLerp = true; //player stay on air for few secs
+                this.slowAfterDodge = true; //player stay on air for few secs
             })
         }
         if (isButtonDown("jump") && this.gameObj.isGrounded()) {
             this.jumped = true;
         }
         if (isButtonDown("right") || isButtonDown("left")) {
+            if (isButtonDown("right")) this.runDirection = "right";
+            if (isButtonDown("left")) this.runDirection = "left";
             this.isRunning = true;
         }
         else {
@@ -90,19 +100,16 @@ class Player {
         let accel = this.accel;
         if (this.isRunning) {
             if (!this.gameObj.isGrounded()) {
-                accel = this.accel*0.8;
+                accel = this.accel*0.8; //for less agility in air
             }
-            if (isButtonDown("right")) {
-                this.moveX += accel;
-            }
-            if (isButtonDown("left")) {
-                this.moveX -= accel;
-            }
+            this.moveX += (this.runDirection === "right") ? accel : -accel;
         }
         else {
             if (this.gameObj.isGrounded()) {
-                if (Math.abs(this.moveX) >= this.accel) {
-                    this.moveX -= Math.sign(this.moveX)*Math.abs(this.accel);
+                //slowly decreases movement instead of just 
+                //setting to zero
+                if (Math.abs(this.moveX) >= accel) {
+                    this.moveX -= Math.sign(this.moveX)*Math.abs(accel);
                 }
                 else {
                     this.moveX = 0;
@@ -125,13 +132,16 @@ class Player {
             this.playerDodge();
             return;
         }
-        else if (this.dodgeLerp) {
-            this.gameObj.vel = vec2Product(this.gameObj.vel, 0.8);
-            wait(0.2, () => {
-                this.dodgeLerp = false; //player stay on air for 0.2s
+        else if (this.slowAfterDodge) {
+            const percentVel = 0.8;
+            this.gameObj.vel = vec2Product(this.gameObj.vel, percentVel);
+            wait(this.dodgeSlowTime, () => {
+                this.slowAfterDodge = false; //player stay on air for seconds
             })
             return;
         }
+
+        //move player based on movex
         this.gameObj.vel = vec2(this.moveX, this.gameObj.vel.y);
 
     }
@@ -143,23 +153,16 @@ class Player {
             this.width*this.gameObj.scale.x, 
             this.height*this.gameObj.scale.y
         );
-        let mouseDelta = mousePos().sub(selfCenter);
+        let mouseDelta = mousePos().sub(selfCenter); //mousePos SUBTRACT selfCenter
         const mouseDeltaLen = mouseDelta.len();
-        const mouseDir = vec2(mouseDelta.x/mouseDeltaLen, mouseDelta.y/mouseDeltaLen);
+        const mouseDir = normalizeVec(mouseDelta, mouseDeltaLen);
 
-        //limit mouse delta between dodge min and dodge radius/max
+        //limit mouse delta between dodge min and dodge radius / dodge max
         if (mouseDeltaLen <= this.dodgeMin) {
-            mouseDelta = vec2(
-                mouseDir.x*this.dodgeMin,
-                mouseDir.y*this.dodgeMin
-            );
+            mouseDelta = vec2Product(mouseDir, this.dodgeMin);
         }
-        if (mouseDeltaLen >= this.dodgeRadius) {
-            mouseDelta = vec2(
-                mouseDir.x*this.dodgeRadius,
-                mouseDir.y*this.dodgeRadius
-            );
-            console.log(mouseDelta)
+        else if (mouseDeltaLen >= this.dodgeRadius) {
+            mouseDelta = vec2Product(mouseDir, this.dodgeRadius)
         }
 
         //move player to mouse position
@@ -194,13 +197,8 @@ class Player {
             (this.state === "falling") ? "fall" :
             //(this.state === "dodging") ? "dodging" : 
             "idle";
-            
-        if (this.gameObj.vel.x < 0 ) {
-            this.gameObj.flipX = true;
-        }
-        else if (this.gameObj.vel.x > 0) {
-            this.gameObj.flipX = false;
-        }
+        
+        this.gameObj.flipX = (this.runDirection === "left") ? true : false;
 
         if (this.animState !== nextAnim) {
             this.animState = nextAnim;
