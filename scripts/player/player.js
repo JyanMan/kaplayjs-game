@@ -11,8 +11,8 @@ class Player {
         this.accel = 50;
         this.moveX = 0;
         this.jumpForce = 600;
-        this.width = 15;
-        this.height = 21.5;
+        this.width = 10;
+        this.height = 19;
 
         this.dodgingTime = 0.1;
         this.dodgeRadius = 200;
@@ -36,7 +36,10 @@ class Player {
             pos(this.pos),
             //FIX THIS AREA, ITS NOT PROPERLY OFFSET
             //COULD FIX SPRITESHEET INSTEAD
-            area({ shape: new Rect(vec2(this.width/2, this.height/2), this.width, this.height)}),
+            area({ 
+                shape: new Rect(vec2(this.width/2, this.height/2), this.width, this.height),
+                offset: vec2(6, 3.5)
+            }),
             body(),
             "player"
         ]); 
@@ -47,12 +50,13 @@ class Player {
     }
 
     draw() {
+        const obj = this.gameObj;
         drawRect({
-            width: this.width*this.gameObj.scale.x,
-            height: this.height*this.gameObj.scale.y,
+            width: this.width*obj.scale.x,
+            height: this.height*obj.scale.y,
             pos: this.gameObj.pos.add(
-                this.width*this.gameObj.scale.x/2,
-                this.height*this.gameObj.scale.y/2
+                (this.width/2 + obj.area.offset.x)*obj.scale.x,
+                (this.height/2+obj.area.offset.y)*obj.scale.y
             ),
             color: YELLOW,
             fill: true
@@ -66,7 +70,7 @@ class Player {
         //console.log(this.gameObj.scale);
         //draw collider for testing
         //organize debugs or draws
-        this.draw();
+        //this.draw();
     }
 
     fixedUpdate() {
@@ -179,7 +183,7 @@ class Player {
     }
 
     playerAnimate() {
-        if (this.dodged) {
+        if (this.dodged || this.slowAfterDodge) {
             this.state = "dodging";
         }
         else if (!this.gameObj.isGrounded()) {
@@ -195,7 +199,7 @@ class Player {
             (this.state === "running") ? "run" :
             (this.state === "rising") ? "rise" :
             (this.state === "falling") ? "fall" :
-            //(this.state === "dodging") ? "dodging" : 
+            (this.state === "dodging") ? "dodge" : 
             "idle";
         
         this.gameObj.flipX = (this.runDirection === "left") ? true : false;

@@ -1,6 +1,19 @@
 export const load = {
     assets: () => {
-        loadSprite("player", '../assets/player/chicken-player.png', {
+        loadSprite("player", '../assets/player/player-with-dodge.png', {
+            sliceX: 6,
+            sliceY: 6,
+            anims: {
+                idle: { from: 0, to: 3, loop: true },
+                run: { from: 5, to: 12, loop: true },
+                rise: { from: 13, to: 13, loop: true},
+                fall: { from: 15, to: 15, loop: true},
+                dodge: { from: 26, to: 30, loop: false}
+            }
+        });
+    },
+    playerChicken: () => {
+        loadSprite("player", '../assets/player/player-with-dodge.png', {
             sliceX: 6,
             sliceY: 6,
             anims: {

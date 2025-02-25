@@ -20,6 +20,9 @@ kaplay({
         dodge: {
             keyboard: ["q"],
             mouse: ["right"]
+        },
+        attack: {
+            mouse: ["left"]
         }
     }
 });
