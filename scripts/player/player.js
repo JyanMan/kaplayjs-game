@@ -17,7 +17,10 @@ class Player {
         this.dodged = false;
         this.state = "idle";
     }
+<<<<<<< HEAD
     
+=======
+>>>>>>> 9c020aaf9755dda7c8aad0563e13c6bf5ad6fb01
     makePlayer() {
         this.gameObj = add([
             sprite("player", { anim: "idle" }),
@@ -55,6 +58,19 @@ class Player {
             this.isRunning = true;
         }
         else {
+<<<<<<< HEAD
+=======
+            // if (this.gameObj.isGrounded())
+            //     this.state = "idle";
+            // else {
+            //     if (this.gameObj.vel.y < 0) {
+            //         this.state = "rising";
+            //     }
+            //     else {
+            //         this.state = "falling";
+            //     }
+            // }
+>>>>>>> 9c020aaf9755dda7c8aad0563e13c6bf5ad6fb01
             this.isRunning = false;
         }
     }
@@ -105,6 +121,16 @@ class Player {
     }
 
     playerAnimate() {
+<<<<<<< HEAD
+=======
+        //USE STATES INSTEAD
+        // const nextAnimation = (anim) => {
+        //     const currentAnim = this.gameObj.getCurAnim().name;
+        //     if (currentAnim === anim) 
+        //         return;
+        //     this.gameObj.play(anim);
+        // }
+>>>>>>> 9c020aaf9755dda7c8aad0563e13c6bf5ad6fb01
         if (this.dodged) {
             this.state = "dodging";
         }
@@ -135,6 +161,32 @@ class Player {
             this.animState = nextAnim;
             this.gameObj.play(nextAnim);
         }
+<<<<<<< HEAD
+=======
+            
+        // if(this.gameObj.vel.x < 0 ) {
+        //     this.gameObj.flipX = true;
+        // }
+        // else if (this.gameObj.vel.x > 0) {
+        //     this.gameObj.flipX = false;
+        // }
+
+        // if (this.gameObj.isGrounded() === false) {
+        //     //jumping
+        //     if (this.gameObj.vel.y <= 0)
+        //         nextAnimation("rise");
+        //     else
+        //         nextAnimation("fall");
+        //     return;
+        // }
+
+        // if (this.gameObj.vel.x !== 0) {
+        //     nextAnimation("run");
+        // }
+        // else {
+        //     nextAnimation("idle");
+        // }
+>>>>>>> 9c020aaf9755dda7c8aad0563e13c6bf5ad6fb01
     }
 }
 
