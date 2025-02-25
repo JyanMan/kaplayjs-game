@@ -54,16 +54,6 @@ class Player {
             this.isRunning = true;
         }
         else {
-            // if (this.gameObj.isGrounded())
-            //     this.state = "idle";
-            // else {
-            //     if (this.gameObj.vel.y < 0) {
-            //         this.state = "rising";
-            //     }
-            //     else {
-            //         this.state = "falling";
-            //     }
-            // }
             this.isRunning = false;
         }
     }
@@ -114,13 +104,6 @@ class Player {
     }
 
     playerAnimate() {
-        //USE STATES INSTEAD
-        // const nextAnimation = (anim) => {
-        //     const currentAnim = this.gameObj.getCurAnim().name;
-        //     if (currentAnim === anim) 
-        //         return;
-        //     this.gameObj.play(anim);
-        // }
         if (this.dodged) {
             this.state = "dodging";
         }
@@ -151,29 +134,6 @@ class Player {
             this.animState = nextAnim;
             this.gameObj.play(nextAnim);
         }
-            
-        // if(this.gameObj.vel.x < 0 ) {
-        //     this.gameObj.flipX = true;
-        // }
-        // else if (this.gameObj.vel.x > 0) {
-        //     this.gameObj.flipX = false;
-        // }
-
-        // if (this.gameObj.isGrounded() === false) {
-        //     //jumping
-        //     if (this.gameObj.vel.y <= 0)
-        //         nextAnimation("rise");
-        //     else
-        //         nextAnimation("fall");
-        //     return;
-        // }
-
-        // if (this.gameObj.vel.x !== 0) {
-        //     nextAnimation("run");
-        // }
-        // else {
-        //     nextAnimation("idle");
-        // }
     }
 }
 
