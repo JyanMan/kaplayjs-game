@@ -17,6 +17,7 @@ class Player {
         this.dodged = false;
         this.state = "idle";
     }
+    
     makePlayer() {
         this.gameObj = add([
             sprite("player", { anim: "idle" }),
