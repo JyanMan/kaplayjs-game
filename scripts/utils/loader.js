@@ -16,7 +16,7 @@ export const load = {
             sliceY: 4,
             anims: {
                 idle: { from: 0, to: 2, loop: true },
-                run: { from: 4, to: 11, loop: true },
+                run: { from: 3, to: 7, loop: true },
                 attack: { from: 12, to: 15, loop: false}
             }
         });

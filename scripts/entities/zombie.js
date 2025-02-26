@@ -7,8 +7,13 @@ class Zombie {
         this.height = 28;
         this.moveX = 0;
 
+        this.attackRadius = 40;
+
         this.isWalking = false;
         this.attacking = false;
+        this.faceRight = false;
+        this.state = "idle";
+        this.animState = "idle";
     }
 
     makeZombie() {
@@ -26,9 +31,12 @@ class Zombie {
         ]);
 
         onUpdate(() => {
-            this.draw();
-            this.followPlayer();
+            //this.draw();
+            this.animation();
         }) 
+        onFixedUpdate(() => {
+            this.move();
+        });
     }
 
     draw() {
@@ -45,15 +53,41 @@ class Zombie {
         })
     }
 
+    move() {
+        this.followPlayer();
+        this.changeDirection();
+    }
+
+    changeDirection() {
+        if (this.gameObj.vel.x > 0) {
+            this.faceRight = true;
+        }
+        else if (this.gameObj.vel.x < 0) {
+            this.faceRight = false;
+        }
+    }
+    
     followPlayer() {
         const player = get("player")[0];
         if (!player) {
             this.isWalking = false;
             return
         }
-        this.isWalking = true;
 
         const distanceToPlayer = player.pos.sub(this.gameObj.pos);
+        this.gameObj.vel = vec2(this.moveX, this.gameObj.vel.y);
+        
+        if (Math.abs(distanceToPlayer.x) <= this.attackRadius) {
+            this.isWalking = false;
+            if (Math.abs(this.moveX) > this.accel) {
+                this.moveX -= this.accel*Math.sign(this.moveX);
+            }
+            else {
+                this.moveX = 0;
+            }
+            return;
+        }
+        this.isWalking = true;
         //console.log(distanceToPlayer);
 
         //move to player
@@ -62,10 +96,26 @@ class Zombie {
             this.moveX = Math.sign(this.moveX)*this.speed;        
         }
 
-        this.gameObj.vel = vec2(
-            this.moveX,
-            this.gameObj.vel.y 
-        );
+    }
+
+    animation() {
+        if (this.isWalking) {
+            this.state = "run";
+        }
+        else {
+            this.state = "idle";
+        }
+
+        const currentAnim =
+            (this.state === "run") ? "run" :
+            "idle";
+        
+        if (currentAnim !== this.animState) {
+            this.animState = currentAnim;
+            this.gameObj.play(currentAnim);
+        }
+        
+        this.gameObj.flipX = !this.faceRight;
     }
 }
 
