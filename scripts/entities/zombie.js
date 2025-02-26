@@ -1,8 +1,11 @@
 class Zombie {
-    constructor(initialX, initialY) {
+    constructor(
+        initialX, 
+        initialY
+    ) {
         this.pos = vec2(initialX, initialY);
         this.speed = 100;
-        this.accel = 5;
+        this.accel = 10;
         this.width = 10;
         this.height = 28;
         this.moveX = 0;

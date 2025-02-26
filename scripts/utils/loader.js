@@ -4,18 +4,19 @@ export const load = {
             sliceX: 6,
             sliceY: 6,
             anims: {
-                idle: { from: 0, to: 3, loop: true },
+                idle: { from: 0, to: 3, loop: true, speed: 4 },
                 run: { from: 5, to: 12, loop: true },
                 rise: { from: 13, to: 13, loop: true},
                 fall: { from: 15, to: 15, loop: true},
-                dodge: { from: 26, to: 30, loop: false}
+                dodge: { from: 26, to: 30, loop: false},
+                attack: { from: 16, to: 20, loop: false}
             }
         });
         loadSprite("zombie", '../assets/zombie.png', {
             sliceX: 4,
             sliceY: 4,
             anims: {
-                idle: { from: 0, to: 2, loop: true },
+                idle: { from: 0, to: 2, loop: true, speed: 3 },
                 run: { from: 3, to: 7, loop: true },
                 attack: { from: 12, to: 15, loop: false}
             }

@@ -21,7 +21,7 @@ class Player {
 
         //USE STATES INSTEAD
         this.isRunning = false;
-        this.runDirection = "right";
+        this.runDirection = 1;
         this.jumped = false;
         this.dodged = false;
         this.slowAfterDodge = false;
@@ -29,6 +29,8 @@ class Player {
         this.attackDuration = 0.5;
         this.state = "idle";
         this.animState = "idle";
+        this.faceRight = false;
+        this.faceMouse = true;
     }
     
     makePlayer() {
@@ -53,12 +55,13 @@ class Player {
         onUpdate(() => {
             this.playerInput();
             this.playerAnimate();
-
+            this.changeFaceDirection();
             //for debuggin collider
             //this.draw();
         });
         onFixedUpdate(() => {
-            this.playerMove();
+            //this.playerMove();
+            this.action();
         });
     }
 
@@ -77,12 +80,21 @@ class Player {
     }
 
     playerInput() {
+
         if (isButtonPressed("dodge") && !this.slowAfterDodge) {
-            this.dodged = true;
-            wait(this.dodgingTime, () => { //name this dodge duration
-                this.dodged = false; 
-                this.slowAfterDodge = true; //player stay on air for few secs
-            })
+            this.startDodge();
+        }
+        if (isButtonDown("right") || isButtonDown("left")) {
+            if (isButtonDown("right")) this.runDirection = 1;
+            else if (isButtonDown("left")) this.runDirection = -1;
+            this.isRunning = true;
+        }
+        else {
+            this.isRunning = false;
+        }
+
+        if (!this.gameObj.isGrounded()) {
+            return;
         }
         if (isButtonPressed("attack") && !this.attacking) {
             console.log("attacked");
@@ -91,20 +103,47 @@ class Player {
                 this.attacking = false;
             })
         }
-        if (isButtonDown("jump") && this.gameObj.isGrounded()) {
+        if (isButtonDown("jump")) {
             this.jumped = true;
-        }
-        if (isButtonDown("right") || isButtonDown("left")) {
-            if (isButtonDown("right")) this.runDirection = "right";
-            if (isButtonDown("left")) this.runDirection = "left";
-            this.isRunning = true;
-        }
-        else {
-            this.isRunning = false;
         }
     }
 
-    playerMove() {
+    action() {
+        //JUMP
+        if (this.jumped) {
+            this.gameObj.jump();
+            this.jumped = false;
+        }
+        
+        //DODGE
+        if (this.dodged) {
+            this.playerDodge();
+            console.log("start")
+            return;
+        }
+        else if (this.slowAfterDodge) {
+            const percentVel = 0.8;
+            this.gameObj.vel = vec2Product(this.gameObj.vel, percentVel);
+            return;
+        }
+
+        //playerattack
+        if (this.attacking) {
+            this.attack();
+            return;
+        }
+        
+        this.moveLeftRight();
+        //move player based on movex
+        this.gameObj.vel = vec2(this.moveX, this.gameObj.vel.y);
+        
+    }
+
+    moveLeftRight() {
+        //limit moveX to player speed
+        if (Math.abs(this.moveX) >= this.speed) {
+            this.moveX = Math.sign(this.moveX)*this.speed;
+        }
 
         //LEFT AND RIGHT MOVEMENT
         let accel = this.accel;
@@ -112,7 +151,7 @@ class Player {
             if (!this.gameObj.isGrounded()) {
                 accel = this.accel*0.8; //for less agility in air
             }
-            this.moveX += (this.runDirection === "right") ? accel : -accel;
+            this.moveX += (this.runDirection === 1) ? accel : -accel;
         }
         else {
             if (this.gameObj.isGrounded()) {
@@ -126,43 +165,29 @@ class Player {
                 }
             }
         }
-        //limit moveX to player speed
-        if (Math.abs(this.moveX) >= this.speed) {
-            this.moveX = Math.sign(this.moveX)*this.speed;
-        }
-        
-        //JUMP
-        if (this.jumped) {
-            this.gameObj.jump();
-            this.jumped = false;
-        }
-        
-        //DODGE
-        if (this.dodged) {
-            this.playerDodge();
-            return;
-        }
-        else if (this.slowAfterDodge) {
-            const percentVel = 0.8;
-            this.gameObj.vel = vec2Product(this.gameObj.vel, percentVel);
-            wait(this.dodgeSlowTime, () => {
-                this.slowAfterDodge = false; //player stay on air for seconds
-            })
-            return;
-        }
-
-        //playerattack
-        if (this.attacking) {
-            this.attack();
-        }
-
-        //move player based on movex
-        this.gameObj.vel = vec2(this.moveX, this.gameObj.vel.y);
-
+    }
+    
+    attack() {
+        this.moveX = 0;
+        this.gameObj.vel = vec2(0, 0);
+        console.log("attacking");
     }
 
-    attack() {
-        console.log("attacking");
+    startDodge() {
+        this.dodged = true;
+        wait(this.dodgingTime, () => { //name this dodge duration
+            this.slowAfterDodge = true; //player stay on air for few secs
+            this.dodged = false; 
+            //this.gameObj.vel = vec2Product(this.gameObj.vel, 0.3);
+            this.startDodgeSlow();
+        })
+    }
+
+    startDodgeSlow() {
+        wait(this.dodgeSlowTime, () => {
+            console.log("end")
+            this.slowAfterDodge = false; //player stay on air for seconds
+        })
     }
     
     playerDodge() {
@@ -204,6 +229,9 @@ class Player {
         else if (!this.gameObj.isGrounded()) {
             this.state = (this.gameObj.vel.y < 0) ? "rising" : "falling";
         }
+        else if (this.attacking) {
+            this.state = "attack";
+        }
         else if (this.isRunning) {
             this.state =  "running";
         }
@@ -215,14 +243,33 @@ class Player {
             (this.state === "rising") ? "rise" :
             (this.state === "falling") ? "fall" :
             (this.state === "dodging") ? "dodge" : 
+            (this.state === "attack") ? "attack" :
             "idle";
         
-        this.gameObj.flipX = (this.runDirection === "left") ? true : false;
-
         if (this.animState !== nextAnim) {
             this.animState = nextAnim;
             this.gameObj.play(nextAnim);
         }
+    }
+    
+    changeFaceDirection() {
+        this.gameObj.flipX = (this.faceRight === false) ? true : false;
+
+        if (this.attacking) {
+            if (this.faceMouse) {
+                this.faceMouse = false;
+                const mouseDirX = Math.sign(mousePos().x - this.gameObj.pos.x);
+                this.faceRight = (mouseDirX === 1) ? true : false;
+            }
+            return;
+        }
+        else {
+            this.faceMouse = true;
+        }
+        
+        this.faceRight = (this.runDirection === 1) ? true : false;
+
+
     }
 }
 
