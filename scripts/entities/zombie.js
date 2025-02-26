@@ -95,7 +95,6 @@ class Zombie {
         if (Math.abs(this.moveX) >= this.speed) {
             this.moveX = Math.sign(this.moveX)*this.speed;        
         }
-
     }
 
     animation() {
