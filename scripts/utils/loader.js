@@ -11,6 +11,15 @@ export const load = {
                 dodge: { from: 26, to: 30, loop: false}
             }
         });
+        loadSprite("zombie", '../assets/zombie.png', {
+            sliceX: 4,
+            sliceY: 4,
+            anims: {
+                idle: { from: 0, to: 2, loop: true },
+                run: { from: 4, to: 11, loop: true },
+                attack: { from: 12, to: 15, loop: false}
+            }
+        });
     },
     playerChicken: () => {
         loadSprite("player", '../assets/player/player-with-dodge.png', {

@@ -1,3 +1,4 @@
+import Zombie from "../entities/zombie.js";
 import Player from "../player/player.js"
 import Ground from "../utils/ground.js"
 
@@ -12,19 +13,20 @@ export const levelOne = () => {
     const platform1 = new Ground(
         200, mainFloor.y-170, 300, 50, groundColor
     );
+
+    const zombie = new Zombie(width()/2, 20);
     
     function start() {
         player.makePlayer();
         platform1.makeGround();
         mainFloor.makeGround();
+        zombie.makeZombie();
     }
     
     onUpdate(() => {
-        player.update();
     });
     
     onFixedUpdate(() => {
-        player.fixedUpdate();
     });
     
     setGravity(1200);

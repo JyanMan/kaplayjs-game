@@ -40,7 +40,8 @@ class Player {
             //COULD FIX SPRITESHEET INSTEAD
             area({ 
                 shape: new Rect(vec2(this.width/2, this.height/2), this.width, this.height),
-                offset: vec2(6, 3.5)
+                offset: vec2(6, 3.5),
+                collisionIgnore: ["player", "zombie"]
             }),
             body(),
             "player"
@@ -48,7 +49,17 @@ class Player {
 
         //stuff called at the start
         this.gameObj.jumpForce = this.jumpForce;
+        
+        onUpdate(() => {
+            this.playerInput();
+            this.playerAnimate();
 
+            //for debuggin collider
+            //this.draw();
+        });
+        onFixedUpdate(() => {
+            this.playerMove();
+        });
     }
 
     draw() {
@@ -63,20 +74,6 @@ class Player {
             color: YELLOW,
             fill: true
         })
-    }
-    
-    update() {
-        this.playerInput();
-        this.playerAnimate();
-
-        //console.log(this.gameObj.scale);
-        //draw collider for testing
-        //organize debugs or draws
-        //this.draw();
-    }
-
-    fixedUpdate() {
-        this.playerMove();
     }
 
     playerInput() {
