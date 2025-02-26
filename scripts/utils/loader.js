@@ -9,7 +9,7 @@ export const load = {
                 rise: { from: 13, to: 13, loop: true},
                 fall: { from: 15, to: 15, loop: true},
                 dodge: { from: 26, to: 30, loop: false},
-                attack: { from: 16, to: 20, loop: false}
+                attack: { from: 16, to: 19, loop: false, speed: 15 }
             }
         });
         loadSprite("zombie", '../assets/zombie.png', {

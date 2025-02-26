@@ -26,7 +26,7 @@ class Player {
         this.dodged = false;
         this.slowAfterDodge = false;
         this.attacking = false;
-        this.attackDuration = 0.5;
+        this.attackDuration = 0.3;
         this.state = "idle";
         this.animState = "idle";
         this.faceRight = false;
@@ -268,8 +268,6 @@ class Player {
         }
         
         this.faceRight = (this.runDirection === 1) ? true : false;
-
-
     }
 }
 
