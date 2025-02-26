@@ -2,9 +2,13 @@ class Zombie {
     constructor(initialX, initialY) {
         this.pos = vec2(initialX, initialY);
         this.speed = 100;
-        this.accel = 20;
+        this.accel = 5;
         this.width = 10;
         this.height = 28;
+        this.moveX = 0;
+
+        this.isWalking = false;
+        this.attacking = false;
     }
 
     makeZombie() {
@@ -23,6 +27,7 @@ class Zombie {
 
         onUpdate(() => {
             this.draw();
+            this.followPlayer();
         }) 
     }
 
@@ -38,6 +43,29 @@ class Zombie {
             color: YELLOW,
             fill: true
         })
+    }
+
+    followPlayer() {
+        const player = get("player")[0];
+        if (!player) {
+            this.isWalking = false;
+            return
+        }
+        this.isWalking = true;
+
+        const distanceToPlayer = player.pos.sub(this.gameObj.pos);
+        //console.log(distanceToPlayer);
+
+        //move to player
+        this.moveX +=Math.sign(distanceToPlayer.x)*this.accel;
+        if (Math.abs(this.moveX) >= this.speed) {
+            this.moveX = Math.sign(this.moveX)*this.speed;        
+        }
+
+        this.gameObj.vel = vec2(
+            this.moveX,
+            this.gameObj.vel.y 
+        );
     }
 }
 
