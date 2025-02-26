@@ -34,7 +34,7 @@ class Zombie {
         ]);
 
         onUpdate(() => {
-            //this.draw();
+            this.draw();
             this.animation();
         }) 
         onFixedUpdate(() => {

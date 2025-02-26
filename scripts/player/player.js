@@ -1,5 +1,6 @@
 import { vec2Product } from "../utils/vector2.js";
 import { normalizeVec } from "../utils/vector2.js";
+import AttackArea from "./attackArea.js";
 
 class Player {
     constructor(
@@ -27,6 +28,7 @@ class Player {
         this.slowAfterDodge = false;
         this.attacking = false;
         this.attackDuration = 0.3;
+        this.attackRadius = 20;
         this.state = "idle";
         this.animState = "idle";
         this.faceRight = false;
@@ -51,6 +53,8 @@ class Player {
 
         //stuff called at the start
         this.gameObj.jumpForce = this.jumpForce;
+        this.attackArea = new AttackArea(this.gameObj, this.attackRadius);
+        this.attackArea.initialize();
         
         onUpdate(() => {
             this.playerInput();
@@ -170,6 +174,11 @@ class Player {
     attack() {
         this.moveX = 0;
         this.gameObj.vel = vec2(0, 0);
+
+        const mouseDirX = Math.sign(mousePos().x - this.gameObj.pos.x);
+
+
+        this.attackArea.attack(mouseDirX, this.attackDuration);
         console.log("attacking");
     }
 
