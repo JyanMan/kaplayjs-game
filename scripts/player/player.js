@@ -1,6 +1,7 @@
 import { vec2Product } from "../utils/vector2.js";
 import { normalizeVec } from "../utils/vector2.js";
 import AttackArea from "./attackArea.js";
+import { getCenterPos } from "../utils/vector2.js";
 
 class Player {
     constructor(
@@ -28,7 +29,7 @@ class Player {
         this.slowAfterDodge = false;
         this.attacking = false;
         this.attackDuration = 0.3;
-        this.attackRadius = 10;
+        this.attackRadius = 15;
         this.state = "idle";
         this.animState = "idle";
         this.faceRight = false;
@@ -61,7 +62,7 @@ class Player {
             this.playerAnimate();
             this.changeFaceDirection();
             //for debuggin collider
-            //this.draw();
+            this.draw();
         });
         onFixedUpdate(() => {
             //this.playerMove();
@@ -80,6 +81,13 @@ class Player {
             ),
             color: YELLOW,
             fill: true
+        })
+
+        //draw the center
+        drawCircle({
+            pos: getCenterPos(this),
+            radius: 10,
+            color: GREEN 
         })
     }
 
@@ -175,9 +183,10 @@ class Player {
         this.moveX = 0;
         this.gameObj.vel = vec2(0, 0);
 
-        const mouseDirX = Math.sign(mousePos().x - this.gameObj.pos.x);
-
-
+        const selfCenter = getCenterPos(this);
+        const mouseDirX = Math.sign(mousePos().x - selfCenter.x);
+        //const mouseDirX = Math.sign(mouseDirection(this).x);
+        //console.log(mousePos().x - selfCenter.x);
         this.attackArea.attack(mouseDirX, this.attackDuration);
         //console.log("attacking");
     }
@@ -202,10 +211,7 @@ class Player {
     playerDodge() {
         //get mouse position from player
         //get mouse direction
-        const selfCenter = this.gameObj.pos.add(
-            this.width*this.gameObj.scale.x, 
-            this.height*this.gameObj.scale.y
-        );
+        const selfCenter = getCenterPos(this);
         let mouseDelta = mousePos().sub(selfCenter); //mousePos SUBTRACT selfCenter
         const mouseDeltaLen = mouseDelta.len();
         const mouseDir = normalizeVec(mouseDelta, mouseDeltaLen);
@@ -267,7 +273,7 @@ class Player {
         if (this.attacking) {
             if (this.faceMouse) {
                 this.faceMouse = false;
-                const mouseDirX = Math.sign(mousePos().x - this.gameObj.pos.x);
+                const mouseDirX = Math.sign(mousePos().x - getCenterPos(this).x);
                 this.faceRight = (mouseDirX === 1) ? true : false;
             }
             return;

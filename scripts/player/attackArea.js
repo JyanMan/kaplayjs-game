@@ -17,7 +17,7 @@ class AttackArea {
                     this.radius,
                     this.radius
                 ),
-                offset: vec2(0, 0) 
+                offset: vec2(-this.radius/2, -this.radius/2) 
             }),
             scale(1),
             pos(vec2(32, 0))
@@ -61,24 +61,36 @@ class AttackArea {
     }
 
     attack(direction, attackDuration) {
-        if (!this.attacking) {
-            this.attacking = true;
-            this.setTimer(attackDuration);
+        if (this.attacking) {
+            this.attackEnemy();
+            return;
         }
+        this.attacking = true;
+        this.setTimer(attackDuration);
         this.colliderColor = GREEN;
         //console.log("attacking");
         console.log(this.gameObj.pos.x);
-        this.gameObj.pos = vec2(this.radius*direction/2, 0).add(
+        this.gameObj.pos = vec2(this.radius*direction/2, 0)
+        .add(
             vec2(
-                0,
-                (this.attacker.height/2)-(this.radius/2)
-            ).add( //anotehr offset, as center of sprite is not the actual center
-                vec2(
-                   0,
-                   this.attacker.area.offset.y 
-                )
+                this.attacker.width/2,
+                this.attacker.height/2
             )
-        );  //this.radius*direction;
+        )
+        // .add(
+        //     vec2(
+        //         this.attacker.width/2,
+        //         (this.attacker.height/2)-(this.radius/2)
+        //     ).add( //anotehr offset, as center of sprite is not the actual center
+        //         vec2(
+        //            -this.attacker.area.offset.x,
+        //            this.attacker.area.offset.y 
+        //         )
+        //     )
+        // );  //this.radius*direction;
+    }
+    
+    attackEnemy() {
         const enemy = get("zombie")[0];
         if (this.gameObj.isOverlapping(enemy)) {
             console.log("enemy");
