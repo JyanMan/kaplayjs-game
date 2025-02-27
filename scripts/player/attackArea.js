@@ -43,11 +43,12 @@ class AttackArea {
         })
     }
 
-    attack(direction, attackDuration) {
+    attack(direction, attackDuration, damage) {
         if (this.attacking) {
-            this.attackEnemy();
             return;
         }
+        //console.log("asdf")
+        this.attackEnemy(damage);
         this.attacking = true;
         this.setTimer(attackDuration);
         this.colliderColor = GREEN;
@@ -62,12 +63,13 @@ class AttackArea {
         )
     }
     
-    attackEnemy() {
+    attackEnemy(damage) {
         const enemy = get("zombie")[0];
         if (this.gameObj.isOverlapping(enemy)) {
             //console.log("enemy");
             //console.log(enemy.isHit);
-            enemy.isHit();
+            //console.log(this.attacker.height);
+            enemy.isHit(damage);
         }
     }
 

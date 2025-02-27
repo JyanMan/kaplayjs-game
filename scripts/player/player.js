@@ -30,6 +30,7 @@ class Player {
         this.attacking = false;
         this.attackDuration = 0.3;
         this.attackRadius = 15;
+        this.attackDamage = 2;
         this.state = "idle";
         this.animState = "idle";
         this.faceRight = false;
@@ -62,7 +63,8 @@ class Player {
             this.playerAnimate();
             this.changeFaceDirection();
             //for debuggin collider
-            this.draw();
+            //this.draw();
+            //console.log(this.gameObj.tag);
         });
         onFixedUpdate(() => {
             //this.playerMove();
@@ -187,7 +189,7 @@ class Player {
         const mouseDirX = Math.sign(mousePos().x - selfCenter.x);
         //const mouseDirX = Math.sign(mouseDirection(this).x);
         //console.log(mousePos().x - selfCenter.x);
-        this.attackArea.attack(mouseDirX, this.attackDuration);
+        this.attackArea.attack(mouseDirX, this.attackDuration, this.attackDamage);
         //console.log("attacking");
     }
 

@@ -1,7 +1,8 @@
 class Zombie {
     constructor(
         initialX, 
-        initialY
+        initialY,
+        health
     ) {
         this.pos = vec2(initialX, initialY);
         this.speed = 100;
@@ -17,6 +18,8 @@ class Zombie {
         this.faceRight = false;
         this.state = "idle";
         this.animState = "idle";
+
+        this.health = health;
     }
 
     makeZombie() {
@@ -32,13 +35,13 @@ class Zombie {
             body(),
             "zombie",
             {
-                isHit: () => this.isHit()
+                isHit: (damage) => this.isHit(damage)
             }
         ]);
 
         onUpdate(() => {
-            this.draw();
             this.animation();
+            //this.draw();
         }) 
         onFixedUpdate(() => {
             this.move();
@@ -123,8 +126,13 @@ class Zombie {
         this.gameObj.flipX = !this.faceRight;
     }
 
-    isHit() {
-        console.log("I'M HIT");
+    isHit(damage) {
+        this.health -= damage;
+        console.log(this.health);
+        if (this.health <= 0) {
+            console.log("DEAD");
+            destroy(this.gameObj);
+        }
     }
 }
 

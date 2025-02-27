@@ -14,7 +14,7 @@ export const levelOne = () => {
         200, mainFloor.y-170, 300, 50, groundColor
     );
 
-    const zombie = new Zombie(width()/2, 20);
+    const zombie = new Zombie(width()/2, 20, 10);
     
     function start() {
         player.makePlayer();
