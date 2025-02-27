@@ -1,3 +1,5 @@
+import { normalizeVec, vec2Product } from "../utils/vector2.js";
+
 class Zombie {
     constructor(
         initialX, 
@@ -16,6 +18,8 @@ class Zombie {
         this.isWalking = false;
         this.attacking = false;
         this.faceRight = false;
+        this.knocked = false;
+        this.attackersLists = new Set();
         this.state = "idle";
         this.animState = "idle";
 
@@ -35,7 +39,7 @@ class Zombie {
             body(),
             "zombie",
             {
-                isHit: (damage) => this.isHit(damage)
+                isHit: (damage, attacker) => this.isHit(damage, attacker)
             }
         ]);
 
@@ -63,6 +67,9 @@ class Zombie {
     }
 
     move() {
+        if (this.knocked) {
+            return;
+        }
         this.followPlayer();
         this.changeDirection();
     }
@@ -126,13 +133,41 @@ class Zombie {
         this.gameObj.flipX = !this.faceRight;
     }
 
-    isHit(damage) {
+    isHit(damage, attacker) {
+       // console.log(attacker.tags);
+
+        if (!attacker) {
+            console.log('this is the reason');
+            return;
+        }
         this.health -= damage;
-        console.log(this.health);
+        //console.log(this.health);
+        
+        if (!this.knocked) {
+            this.knocked = true
+            this.knockback(attacker);
+            this.setKnockTimer();
+        }
+        
         if (this.health <= 0) {
             console.log("DEAD");
             destroy(this.gameObj);
         }
+    }
+
+    setKnockTimer() {
+        wait(0.2, () => {
+            this.knocked = false;
+        });
+    }
+
+    knockback(attacker) {
+        const knockDirection = normalizeVec(this.gameObj.pos.sub(attacker.pos));
+        //console.log(knockDirection);
+        //console.log(this.gameObj.vel);
+        this.gameObj.vel = vec2Product(knockDirection, attacker.knockStrength*2);
+        //this.gameObj.addForce(vec2Product(knockDirection, attacker.knockStrength*100));
+        //this.gameObj.vel = knockDirection*attacker.knockStrength;
     }
 }
 

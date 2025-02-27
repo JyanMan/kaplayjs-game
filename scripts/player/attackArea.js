@@ -1,10 +1,12 @@
 class AttackArea {
-    constructor(attacker, radius, target) {
+    constructor(attacker) {
+        //USE TARGET VARIABLE
         this.attacker = attacker;
-        this.radius = radius;
+        this.radius = attacker.attackRadius;
         this.attacking = false;
-        this.scale = this.attacker.scale.x;
-        this.target = target;
+        this.scale = attacker.scale.x;
+
+        this.alreadyHit = new Set();
 
         //for debugging, drawing area rect
         this.colliderColor = RED;
@@ -26,6 +28,7 @@ class AttackArea {
 
         onUpdate(() => {
             this.draw();
+           // console.log(this.attacker.attackRadius);
         }) 
     }
     draw() {
@@ -43,14 +46,15 @@ class AttackArea {
         })
     }
 
-    attack(direction, attackDuration, damage) {
+    attack(direction, targets) {
         if (this.attacking) {
+            this.attackEnemy(this.attacker.attackDamage, targets);
             return;
         }
+        this.alreadyHit.clear();
         //console.log("asdf")
-        this.attackEnemy(damage);
         this.attacking = true;
-        this.setTimer(attackDuration);
+        this.setTimer(this.attacker.attackDuration);
         this.colliderColor = GREEN;
         //console.log("attacking");
         //console.log(this.gameObj.pos.x);
@@ -61,16 +65,40 @@ class AttackArea {
                 this.attacker.height/2
             )
         )
+        //SOMETHING TO FIX
     }
     
-    attackEnemy(damage) {
-        const enemy = get("zombie")[0];
-        if (this.gameObj.isOverlapping(enemy)) {
-            //console.log("enemy");
-            //console.log(enemy.isHit);
-            //console.log(this.attacker.height);
-            enemy.isHit(damage);
+    attackEnemy(damage, targets) {
+        //console.log(targets);
+        if (targets.length === 0) {
+            return;
         }
+
+        targets.forEach((target) => {
+
+            console.log(target.id);
+            if (this.alreadyHit.has(target.id)) {
+                console.log("hit already");
+                return;
+            }
+            this.alreadyHit.add(target.id);
+
+            // //check if target is already attacked
+            // if (target.tags.some(tag => this.alreadyHit.has(tag))) {
+            //     console.log(this.alreadyHit);
+            //     return;
+            // }
+            // //otherwise, add the target tag to already attacked list
+            // target.tags.forEach(tag => {
+            //     if (tag !== "*") {
+            //         this.alreadyHit.add(tag);
+            //     }
+            // });
+    
+            if (this.gameObj.isOverlapping(target)) {
+                target.isHit(damage, this.attacker);
+            }
+        });
     }
 
     attackEnd() {

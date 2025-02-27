@@ -7,6 +7,7 @@ class Player {
     constructor(
         initialX,
         initialY,
+        health
     ) {
         this.pos = vec2(initialX, initialY);
         this.speed = 250;
@@ -31,6 +32,7 @@ class Player {
         this.attackDuration = 0.3;
         this.attackRadius = 15;
         this.attackDamage = 2;
+        this.health = health;
         this.state = "idle";
         this.animState = "idle";
         this.faceRight = false;
@@ -50,12 +52,19 @@ class Player {
                 collisionIgnore: ["player", "zombie"]
             }),
             body(),
-            "player"
+            "player",
+            {
+                //public properties
+                attackDamage: this.attackDamage,
+                attackRadius: this.attackRadius,
+                attackDuration: this.attackDuration,
+                knockStrength: 100
+            }
         ]); 
 
         //stuff called at the start
         this.gameObj.jumpForce = this.jumpForce;
-        this.attackArea = new AttackArea(this.gameObj, this.attackRadius);
+        this.attackArea = new AttackArea(this.gameObj);
         this.attackArea.initialize();
         
         onUpdate(() => {
@@ -189,7 +198,8 @@ class Player {
         const mouseDirX = Math.sign(mousePos().x - selfCenter.x);
         //const mouseDirX = Math.sign(mouseDirection(this).x);
         //console.log(mousePos().x - selfCenter.x);
-        this.attackArea.attack(mouseDirX, this.attackDuration, this.attackDamage);
+        const targets = get("zombie");
+        this.attackArea.attack(mouseDirX, targets);
         //console.log("attacking");
     }
 

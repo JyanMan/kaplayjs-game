@@ -15,12 +15,14 @@ export const levelOne = () => {
     );
 
     const zombie = new Zombie(width()/2, 20, 10);
+    const zombie2 = new Zombie(60, 40, 10);
     
     function start() {
         player.makePlayer();
         platform1.makeGround();
         mainFloor.makeGround();
         zombie.makeZombie();
+        zombie2.makeZombie();
     }
     
     onUpdate(() => {
