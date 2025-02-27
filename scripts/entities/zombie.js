@@ -30,7 +30,10 @@ class Zombie {
                 collisionIgnore: ["player", "zombie"]
             }),
             body(),
-            "zombie"
+            "zombie",
+            {
+                isHit: () => this.isHit()
+            }
         ]);
 
         onUpdate(() => {
@@ -118,6 +121,10 @@ class Zombie {
         }
         
         this.gameObj.flipX = !this.faceRight;
+    }
+
+    isHit() {
+        console.log("I'M HIT");
     }
 }
 
