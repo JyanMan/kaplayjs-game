@@ -8,8 +8,8 @@ class Player {
         initialY,
     ) {
         this.pos = vec2(initialX, initialY);
-        this.speed = 300;
-        this.accel = 50;
+        this.speed = 250;
+        this.accel = 25;
         this.moveX = 0;
         this.jumpForce = 600;
         this.width = 10;
@@ -28,7 +28,7 @@ class Player {
         this.slowAfterDodge = false;
         this.attacking = false;
         this.attackDuration = 0.3;
-        this.attackRadius = 20;
+        this.attackRadius = 10;
         this.state = "idle";
         this.animState = "idle";
         this.faceRight = false;
@@ -101,7 +101,7 @@ class Player {
             return;
         }
         if (isButtonPressed("attack") && !this.attacking) {
-            console.log("attacked");
+            //console.log("attacked");
             this.attacking = true;
             wait(this.attackDuration, () => {
                 this.attacking = false;
@@ -122,7 +122,7 @@ class Player {
         //DODGE
         if (this.dodged) {
             this.playerDodge();
-            console.log("start")
+            //console.log("start")
             return;
         }
         else if (this.slowAfterDodge) {
@@ -179,7 +179,7 @@ class Player {
 
 
         this.attackArea.attack(mouseDirX, this.attackDuration);
-        console.log("attacking");
+        //console.log("attacking");
     }
 
     startDodge() {
@@ -194,7 +194,7 @@ class Player {
 
     startDodgeSlow() {
         wait(this.dodgeSlowTime, () => {
-            console.log("end")
+            //console.log("end")
             this.slowAfterDodge = false; //player stay on air for seconds
         })
     }
