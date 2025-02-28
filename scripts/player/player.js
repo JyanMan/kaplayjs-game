@@ -77,7 +77,7 @@ class Player {
             this.attackArea = new AttackArea(this.gameObj);
             this.attackArea.initialize();
 
-            this.healthBar = new HealthBar(this.gameObj);
+            this.healthBar = new HealthBar(this.maxHealth, this.health);
             this.healthBar.initialize();
 
         }

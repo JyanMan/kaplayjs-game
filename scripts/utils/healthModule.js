@@ -13,6 +13,11 @@ export function isHit(entity, damage, attacker) {
     entity.health -= damage;
     console.log(entity.health);
     //console.log(this.health);
+
+    if (entity.healthBar) {
+        console.log("asdfadf");
+        entity.healthBar.updateHealthBar(entity.maxHealth, entity.health);
+    }
     
     if (!entity.knocked) {
         entity.knocked = true
