@@ -305,7 +305,9 @@ class Player {
 
     isHit(damage, attacker) {
         //console.log(attacker);
- 
+        if (this.dodged || this.slowAfterDodge) {
+            return;
+        }
          if (!attacker) {
              //console.log('this is the reason');
              return;

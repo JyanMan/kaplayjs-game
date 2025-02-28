@@ -47,6 +47,7 @@ class AttackArea {
     }
 
     attack(direction, targets) {
+        console.log("existing")
         //console.log("asdfasdf");
         if (this.attacking) {
             this.attackTarget(this.attacker.attackDamage, targets);

@@ -9,7 +9,7 @@ class Zombie {
     ) {
         this.pos = vec2(initialX, initialY);
         this.speed = 100;
-        this.accel = 10;
+        this.accel = this.speed/10;
         this.width = 10;
         this.height = 28;
         this.moveX = 0;
@@ -40,21 +40,31 @@ class Zombie {
             area({
                 shape: new Rect(vec2(this.width/2, this.height/2), this.width, this.height),
                 offset: vec2(6, -10),
-                collisionIgnore: ["player", "zombie"]
+                collisionIgnore: ["player"]
             }),
             body(),
             "zombie",
             {
                 attackDamage: this.attackDamage,
-                attackRadius: this.attackRadius,
+                attackRadius: this.attackRadius/4,
                 attackDuration: this.attackDuration,
                 knockStrength: 150,
                 isHit: (damage, attacker) => this.isHit(damage, attacker)
             }
         ]);
 
-        this.attackArea = new AttackArea(this.gameObj);
-        this.attackArea.initialize();
+        this.start = () => {
+
+            this.attackArea = new AttackArea(this.gameObj);
+            this.attackArea.initialize();
+
+            //randomize this.speed
+            const randomNum = (Math.random()*0.5)+0.5;
+            //console.log(randomNum);
+            this.speed = this.speed*randomNum;
+            this.accel = this.speed/10;
+        }
+        this.start();
 
         onUpdate(() => {
             this.animation();
