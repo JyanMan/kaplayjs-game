@@ -1,7 +1,7 @@
 import { normalizeVec } from "./vector2.js";
 import { vec2Product } from "./vector2.js";
 
-export function isHitTest(entity, damage, attacker) {
+export function isHit(entity, damage, attacker) {
     
     if (entity.dodged || entity.slowAfterDodge) {
         return;

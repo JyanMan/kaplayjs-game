@@ -1,6 +1,6 @@
 import AttackArea from "../player/attackArea.js";
 import { normalizeVec, vec2Product } from "../utils/vector2.js";
-import { isHitTest } from "../utils/healthModule.js";
+import { isHit } from "../utils/healthModule.js";
 
 class Zombie {
     constructor(
@@ -50,7 +50,7 @@ class Zombie {
                 attackRadius: this.attackRadius/4,
                 attackDuration: this.attackDuration,
                 knockStrength: 150,
-                isHit: (entity, damage, attacker) => isHitTest(this, damage, attacker)
+                isHit: (entity, damage, attacker) => isHit(this, damage, attacker)
             }
         ]);
 
@@ -167,44 +167,6 @@ class Zombie {
         }
         
         this.gameObj.flipX = !this.faceRight;
-    }
-
-    //MAKE A CLASS HITBOX ABOUT THESE
-    isHit(damage, attacker) {
-       // console.log(attacker.tags);
-
-        if (!attacker) {
-            console.log('this is the reason');
-            return;
-        }
-        this.health -= damage;
-        //console.log(this.health);
-        
-        if (!this.knocked) {
-            this.knocked = true
-            this.knockback(attacker);
-            this.setKnockTimer();
-        }
-        
-        if (this.health <= 0) {
-            console.log("DEAD");
-            destroy(this.gameObj);
-        }
-    }
-
-    setKnockTimer() { //MAKE ONE FUNCTION SETTIMER NEXT TIME
-        wait(0.2, () => {
-            this.knocked = false;
-        });
-    }
-
-    knockback(attacker) {
-        const knockDirection = normalizeVec(this.gameObj.pos.sub(attacker.pos));
-        //console.log(knockDirection);
-        //console.log(this.gameObj.vel);
-        this.gameObj.vel = vec2Product(knockDirection, attacker.knockStrength*2);
-        //this.gameObj.addForce(vec2Product(knockDirection, attacker.knockStrength*100));
-        //this.gameObj.vel = knockDirection*attacker.knockStrength;
     }
 
     attack() {

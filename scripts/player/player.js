@@ -2,7 +2,7 @@ import { vec2Product } from "../utils/vector2.js";
 import { normalizeVec } from "../utils/vector2.js";
 import AttackArea from "./attackArea.js";
 import { getCenterPos } from "../utils/vector2.js";
-import { isHitTest } from "../utils/healthModule.js";
+import { isHit } from "../utils/healthModule.js";
 
 class Player {
     constructor(
@@ -62,7 +62,7 @@ class Player {
                 attackRadius: this.attackRadius,
                 attackDuration: this.attackDuration,
                 knockStrength: 100,
-                isHit: (entity, damage, attacker) => isHitTest(this, damage, attacker) //(entity, damage, attacker) => this.isHit(this, damage, attacker)
+                isHit: (entity, damage, attacker) => isHit(this, damage, attacker) //(entity, damage, attacker) => this.isHit(this, damage, attacker)
             }
         ]); 
 
@@ -302,45 +302,6 @@ class Player {
         }
         
         this.faceRight = (this.runDirection === 1) ? true : false;
-    }
-
-    isHit(damage, attacker) {
-        //console.log(attacker);
-        if (this.dodged || this.slowAfterDodge) {
-            return;
-        }
-         if (!attacker) {
-             //console.log('this is the reason');
-             return;
-         }
-         this.health -= damage;
-         console.log(this.health);
-         
-         if (!this.knocked) {
-             this.knocked = true
-             this.knockback(attacker);
-             this.setKnockTimer();
-         }
-         
-         if (this.health <= 0) {
-             console.log("DEAD");
-             destroy(this.gameObj);
-         }
-     }
-
-     setKnockTimer() { //MAKE ONE FUNCTION SETTIMER NEXT TIME
-        wait(0.2, () => {
-            this.knocked = false;
-        });
-    }
-
-    knockback(attacker) {
-        const knockDirection = normalizeVec(this.gameObj.pos.sub(attacker.pos));
-        //console.log(knockDirection);
-        //console.log(this.gameObj.vel);
-        this.gameObj.vel = vec2Product(knockDirection, attacker.knockStrength*2);
-        //this.gameObj.addForce(vec2Product(knockDirection, attacker.knockStrength*100));
-        //this.gameObj.vel = knockDirection*attacker.knockStrength;
     }
 }
 
