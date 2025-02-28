@@ -25,6 +25,10 @@ export const load = {
                 attack: { from: 10, to: 15, loop: false, speed: 10}
             }
         });
+        loadSprite("entity-healthbar", '../assets/entity-hp-bar.png', {
+            sliceX: 1,
+            sliceY: 2,
+        })
     },
     playerChicken: () => {
         loadSprite("player", '../assets/player/player-with-dodge.png', {

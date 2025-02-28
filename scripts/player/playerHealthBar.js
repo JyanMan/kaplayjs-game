@@ -9,18 +9,11 @@ class HealthBar {
     }
 
     initialize() {
-        // this.gameObj = add([
-        //     sprite('healthbar', { frame: 1 }),
-        //     scale(4),
-        //     pos(0, 0)
-        // ])
         
         //setup currenthealthwidth;
         this.updateHealthBar(this.maxHealth, this.currentHealth)
 
         onUpdate(() => {
-            //console.log(this.owner.width*this.owner.scale.x);
-            //console.log(this.currentHealth, this.maxHealth);
             drawSprite({
                 sprite: "healthbar",
                 width: this.emptyHealthWidth, 

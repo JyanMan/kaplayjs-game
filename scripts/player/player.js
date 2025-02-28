@@ -3,7 +3,7 @@ import { normalizeVec } from "../utils/vector2.js";
 import AttackArea from "./attackArea.js";
 import { getCenterPos } from "../utils/vector2.js";
 import { isHit } from "../utils/healthModule.js";
-import HealthBar from "./healthBar.js";
+import HealthBar from "./playerHealthBar.js";
 
 class Player {
     constructor(
