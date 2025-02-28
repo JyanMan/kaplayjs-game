@@ -22,7 +22,7 @@ export const levelOne = () => {
         platform1.makeGround();
         mainFloor.makeGround();
         zombie.makeZombie();
-        //zombie2.makeZombie();
+        zombie2.makeZombie();
     }
     
     onUpdate(() => {

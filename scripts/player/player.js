@@ -32,6 +32,8 @@ class Player {
         this.attackDuration = 0.3;
         this.attackRadius = 15;
         this.attackDamage = 2;
+
+        this.knocked = false;
         this.health = health;
         this.state = "idle";
         this.animState = "idle";
@@ -59,7 +61,7 @@ class Player {
                 attackRadius: this.attackRadius,
                 attackDuration: this.attackDuration,
                 knockStrength: 100,
-                isHit: () => this.isHit()
+                isHit: (damage, attacker) => this.isHit(damage, attacker)
             }
         ]); 
 
@@ -134,6 +136,9 @@ class Player {
 
     action() {
         //JUMP
+        if (this.knocked) {
+            return;
+        }
         if (this.jumped) {
             this.gameObj.jump();
             this.jumped = false;
@@ -298,12 +303,41 @@ class Player {
         this.faceRight = (this.runDirection === 1) ? true : false;
     }
 
-    isHit() {
-        console.log("hit");
+    isHit(damage, attacker) {
+        //console.log(attacker);
+ 
+         if (!attacker) {
+             //console.log('this is the reason');
+             return;
+         }
+         this.health -= damage;
+         console.log(this.health);
+         
+         if (!this.knocked) {
+             this.knocked = true
+             this.knockback(attacker);
+             this.setKnockTimer();
+         }
+         
+         if (this.health <= 0) {
+             console.log("DEAD");
+             destroy(this.gameObj);
+         }
+     }
+
+     setKnockTimer() { //MAKE ONE FUNCTION SETTIMER NEXT TIME
+        wait(0.2, () => {
+            this.knocked = false;
+        });
     }
 
-    knockback() {
-
+    knockback(attacker) {
+        const knockDirection = normalizeVec(this.gameObj.pos.sub(attacker.pos));
+        //console.log(knockDirection);
+        //console.log(this.gameObj.vel);
+        this.gameObj.vel = vec2Product(knockDirection, attacker.knockStrength*2);
+        //this.gameObj.addForce(vec2Product(knockDirection, attacker.knockStrength*100));
+        //this.gameObj.vel = knockDirection*attacker.knockStrength;
     }
 }
 

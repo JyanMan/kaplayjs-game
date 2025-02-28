@@ -68,6 +68,7 @@ class AttackArea {
         //SOMETHING TO FIX
     }
     
+    
     attackTarget(damage, targets) {
         if (targets.length === 0) {
             return;
@@ -86,6 +87,7 @@ class AttackArea {
             }
             this.alreadyHit.add(target.id);
             //console.log("hit")
+            //console.log(this.attacker.tags);
             target.isHit(damage, this.attacker);
         });
     }

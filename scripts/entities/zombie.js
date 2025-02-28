@@ -48,7 +48,7 @@ class Zombie {
                 attackDamage: this.attackDamage,
                 attackRadius: this.attackRadius,
                 attackDuration: this.attackDuration,
-                knockStrength: 50,
+                knockStrength: 150,
                 isHit: (damage, attacker) => this.isHit(damage, attacker)
             }
         ]);
@@ -158,6 +158,7 @@ class Zombie {
         this.gameObj.flipX = !this.faceRight;
     }
 
+    //MAKE A CLASS HITBOX ABOUT THESE
     isHit(damage, attacker) {
        // console.log(attacker.tags);
 
