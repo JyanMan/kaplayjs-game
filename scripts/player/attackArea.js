@@ -47,7 +47,7 @@ class AttackArea {
     }
 
     attack(direction, targets) {
-        console.log("existing")
+        //console.log("existing")
         //console.log("asdfasdf");
         if (this.attacking) {
             this.attackTarget(this.attacker.attackDamage, targets);
@@ -89,7 +89,8 @@ class AttackArea {
             this.alreadyHit.add(target.id);
             //console.log("hit")
             //console.log(this.attacker.tags);
-            target.isHit(damage, this.attacker);
+            //console.log(this);
+            target.isHit(0, damage, this.attacker);
         });
     }
 

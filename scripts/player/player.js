@@ -2,6 +2,7 @@ import { vec2Product } from "../utils/vector2.js";
 import { normalizeVec } from "../utils/vector2.js";
 import AttackArea from "./attackArea.js";
 import { getCenterPos } from "../utils/vector2.js";
+import { isHitTest } from "../utils/healthModule.js";
 
 class Player {
     constructor(
@@ -61,7 +62,7 @@ class Player {
                 attackRadius: this.attackRadius,
                 attackDuration: this.attackDuration,
                 knockStrength: 100,
-                isHit: (damage, attacker) => this.isHit(damage, attacker)
+                isHit: (entity, damage, attacker) => isHitTest(this, damage, attacker) //(entity, damage, attacker) => this.isHit(this, damage, attacker)
             }
         ]); 
 

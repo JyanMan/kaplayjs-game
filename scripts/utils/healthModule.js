@@ -2,11 +2,16 @@ import { normalizeVec } from "./vector2.js";
 import { vec2Product } from "./vector2.js";
 
 export function isHitTest(entity, damage, attacker) {
+    
+    if (entity.dodged || entity.slowAfterDodge) {
+        return;
+    }
+    
     if (!attacker) {
-        console.log('this is the reason');
         return;
     }
     entity.health -= damage;
+    console.log(entity.health);
     //console.log(this.health);
     
     if (!entity.knocked) {
@@ -17,7 +22,7 @@ export function isHitTest(entity, damage, attacker) {
     
     if (entity.health <= 0) {
         console.log("DEAD");
-        destroy(this.gameObj);
+        destroy(entity.gameObj);
     }
 }
 
