@@ -58,7 +58,8 @@ class Player {
                 attackDamage: this.attackDamage,
                 attackRadius: this.attackRadius,
                 attackDuration: this.attackDuration,
-                knockStrength: 100
+                knockStrength: 100,
+                isHit: () => this.isHit()
             }
         ]); 
 
@@ -295,6 +296,14 @@ class Player {
         }
         
         this.faceRight = (this.runDirection === 1) ? true : false;
+    }
+
+    isHit() {
+        console.log("hit");
+    }
+
+    knockback() {
+
     }
 }
 

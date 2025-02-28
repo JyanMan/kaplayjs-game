@@ -1,3 +1,4 @@
+import AttackArea from "../player/attackArea.js";
 import { normalizeVec, vec2Product } from "../utils/vector2.js";
 
 class Zombie {
@@ -20,6 +21,11 @@ class Zombie {
         this.faceRight = false;
         this.knocked = false;
         this.attackersLists = new Set();
+        this.attacked = false;
+        this.attackCoolingDown = false;
+        this.attackDuration = 0.4;
+        this.attackCooldown = 1;
+        this.attackDamage = 2;
         this.state = "idle";
         this.animState = "idle";
 
@@ -39,9 +45,16 @@ class Zombie {
             body(),
             "zombie",
             {
+                attackDamage: this.attackDamage,
+                attackRadius: this.attackRadius,
+                attackDuration: this.attackDuration,
+                knockStrength: 50,
                 isHit: (damage, attacker) => this.isHit(damage, attacker)
             }
         ]);
+
+        this.attackArea = new AttackArea(this.gameObj);
+        this.attackArea.initialize();
 
         onUpdate(() => {
             this.animation();
@@ -49,6 +62,7 @@ class Zombie {
         }) 
         onFixedUpdate(() => {
             this.move();
+            //this.attackIfOnRange();
         });
     }
 
@@ -95,6 +109,10 @@ class Zombie {
         
         if (Math.abs(distanceToPlayer.x) <= this.attackRadius) {
             this.isWalking = false;
+            if (Math.abs(distanceToPlayer.y) <= this.attackRadius) {
+
+                this.attack();
+            }
             if (Math.abs(this.moveX) > this.accel) {
                 this.moveX -= this.accel*Math.sign(this.moveX);
             }
@@ -111,10 +129,15 @@ class Zombie {
         if (Math.abs(this.moveX) >= this.speed) {
             this.moveX = Math.sign(this.moveX)*this.speed;        
         }
+
     }
 
     animation() {
-        if (this.isWalking) {
+        //console.log(this.attacked);
+        if (this.attacked) {
+            this.state = "attack";
+        }
+        else if (this.isWalking) {
             this.state = "run";
         }
         else {
@@ -123,9 +146,11 @@ class Zombie {
 
         const currentAnim =
             (this.state === "run") ? "run" :
+            (this.state === "attack") ? "attack" :
             "idle";
         
         if (currentAnim !== this.animState) {
+            //console.log("asfadf");
             this.animState = currentAnim;
             this.gameObj.play(currentAnim);
         }
@@ -155,7 +180,7 @@ class Zombie {
         }
     }
 
-    setKnockTimer() {
+    setKnockTimer() { //MAKE ONE FUNCTION SETTIMER NEXT TIME
         wait(0.2, () => {
             this.knocked = false;
         });
@@ -168,6 +193,43 @@ class Zombie {
         this.gameObj.vel = vec2Product(knockDirection, attacker.knockStrength*2);
         //this.gameObj.addForce(vec2Product(knockDirection, attacker.knockStrength*100));
         //this.gameObj.vel = knockDirection*attacker.knockStrength;
+    }
+
+    attack() {
+        // const distToPlayer = player.pos.sub(this.gameObj.pos);
+        // //console.log(distToPlayer);
+        // if (Math.abs(distToPlayer.x) <= this.attackRadius) {
+        //     console.log("within range");
+        // }
+        if (!this.gameObj.isGrounded()) {
+            return;
+        }
+        if (this.attacked) {
+            this.attackTarget();
+            return;
+        }
+        if (this.attackCoolingDown) {
+            return;
+        }
+        this.setAttackTimer();
+        this.attackCoolingDown = true;
+        this.attacked = true;
+        //console.log("attacked");
+    }
+
+    attackTarget() {
+        const players = get("player");
+        const attackDir = (this.faceRight) ? 1 : -1;
+        this.attackArea.attack(attackDir, players);
+    }
+
+    setAttackTimer() {
+        wait(this.attackDuration, () => {
+            this.attacked = false;
+        })
+        wait(this.attackCooldown, () => {
+            this.attackCoolingDown = false;
+        })
     }
 }
 

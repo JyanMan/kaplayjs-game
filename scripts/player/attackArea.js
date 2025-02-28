@@ -47,11 +47,11 @@ class AttackArea {
     }
 
     attack(direction, targets) {
+        //console.log("asdfasdf");
         if (this.attacking) {
-            this.attackEnemy(this.attacker.attackDamage, targets);
+            this.attackTarget(this.attacker.attackDamage, targets);
             return;
         }
-        this.alreadyHit.clear();
         //console.log("asdf")
         this.attacking = true;
         this.setTimer(this.attacker.attackDuration);
@@ -68,42 +68,32 @@ class AttackArea {
         //SOMETHING TO FIX
     }
     
-    attackEnemy(damage, targets) {
-        //console.log(targets);
+    attackTarget(damage, targets) {
         if (targets.length === 0) {
             return;
         }
+        //console.log(targets);
 
         targets.forEach((target) => {
-
-            console.log(target.id);
+            
+            if (!this.gameObj.isOverlapping(target)) {
+                //console.log(target.id);
+                return;
+            }
             if (this.alreadyHit.has(target.id)) {
-                console.log("hit already");
+                //console.log("hit already");
                 return;
             }
             this.alreadyHit.add(target.id);
-
-            // //check if target is already attacked
-            // if (target.tags.some(tag => this.alreadyHit.has(tag))) {
-            //     console.log(this.alreadyHit);
-            //     return;
-            // }
-            // //otherwise, add the target tag to already attacked list
-            // target.tags.forEach(tag => {
-            //     if (tag !== "*") {
-            //         this.alreadyHit.add(tag);
-            //     }
-            // });
-    
-            if (this.gameObj.isOverlapping(target)) {
-                target.isHit(damage, this.attacker);
-            }
+            //console.log("hit")
+            target.isHit(damage, this.attacker);
         });
     }
 
     attackEnd() {
         this.attacking = false;
         this.colliderColor = RED;
+        this.alreadyHit.clear();
     }
 
     setTimer(attackDuration) {

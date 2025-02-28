@@ -6,7 +6,7 @@ export const levelOne = () => {
     
     const groundColor = [100, 80, 70];
 
-    const player = new Player(width()/2, 0);
+    const player = new Player(width()/2, 0, 20);
     const mainFloor = new Ground(
         0, height()-100, width(), 100, groundColor
     )
@@ -22,7 +22,7 @@ export const levelOne = () => {
         platform1.makeGround();
         mainFloor.makeGround();
         zombie.makeZombie();
-        zombie2.makeZombie();
+        //zombie2.makeZombie();
     }
     
     onUpdate(() => {
