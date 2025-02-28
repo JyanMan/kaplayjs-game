@@ -4,6 +4,7 @@ import AttackArea from "./attackArea.js";
 import { getCenterPos } from "../utils/vector2.js";
 import { isHit } from "../utils/healthModule.js";
 import HealthBar from "./playerHealthBar.js";
+import DodgeBar from "./playerDodgeBar.js";
 
 class Player {
     constructor(
@@ -30,6 +31,9 @@ class Player {
         this.dodgeSlowTime = 0.2;
         this.dodged = false;
         this.slowAfterDodge = false;
+        this.dodgeAmountMax = 2;
+        this.dodgeAmount = this.dodgeAmountMax;
+        this.dodgeCooldown = 1;
 
         this.attacking = false;
         this.attackDuration = 0.3;
@@ -80,6 +84,9 @@ class Player {
             this.healthBar = new HealthBar(this.maxHealth, this.health);
             this.healthBar.initialize();
 
+            this.dodgeBar = new DodgeBar(this);
+            this.dodgeBar.initialize();
+
         }
         start();
         
@@ -87,6 +94,8 @@ class Player {
             this.playerInput();
             this.playerAnimate();
             this.changeFaceDirection();
+
+            console.log(this.dodgeAmount, this.dodgeAmountMax);
             //for debuggin collider
             //this.draw();
             //console.log(this.gameObj.tag);
@@ -120,7 +129,9 @@ class Player {
 
     playerInput() {
 
-        if (isButtonPressed("dodge") && !this.slowAfterDodge) {
+        if (isButtonPressed("dodge") && !this.slowAfterDodge &&
+        this.dodgeAmount > 0
+    ) {
             this.startDodge();
         }
         if (isButtonDown("right") || isButtonDown("left")) {
@@ -223,6 +234,12 @@ class Player {
     }
 
     startDodge() {
+        //decrement dodge amount
+        this.dodgeAmount--;
+        if (this.dodgeAmount === this.dodgeAmountMax-1) {
+            this.setDodgeResetTimer();
+        }
+
         this.dodged = true;
         wait(this.dodgingTime, () => { //name this dodge duration
             this.slowAfterDodge = true; //player stay on air for few secs
@@ -236,6 +253,11 @@ class Player {
         wait(this.dodgeSlowTime, () => {
             //console.log("end")
             this.slowAfterDodge = false; //player stay on air for seconds
+        })
+    }
+    setDodgeResetTimer() {
+        wait(this.dodgeCooldown, () => {
+            this.dodgeAmount = this.dodgeAmountMax;
         })
     }
     
