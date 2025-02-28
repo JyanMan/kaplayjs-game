@@ -29,7 +29,7 @@ class HealthBar {
                 pos: vec2((this.emptyHealthWidth-this.currentHealthWidth)/6, 0),
                 frame: 0,
             })
-            console.log(this.currentHealthWidth);
+            //console.log(this.currentHealthWidth);
         })
     }
 

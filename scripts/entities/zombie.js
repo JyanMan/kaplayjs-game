@@ -61,7 +61,6 @@ class Zombie {
 
             this.attackArea = new AttackArea(this.gameObj);
             this.attackArea.initialize();
-
             //randomize this.speed
             const randomNum = (Math.random()*0.5)+0.5;
             //console.log(randomNum);
