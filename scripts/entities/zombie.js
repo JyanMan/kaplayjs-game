@@ -1,5 +1,6 @@
 import AttackArea from "../player/attackArea.js";
 import { normalizeVec, vec2Product } from "../utils/vector2.js";
+import { isHitTest } from "../utils/hitbox.js";
 
 class Zombie {
     constructor(
@@ -49,7 +50,7 @@ class Zombie {
                 attackRadius: this.attackRadius/4,
                 attackDuration: this.attackDuration,
                 knockStrength: 150,
-                isHit: (damage, attacker) => this.isHit(damage, attacker)
+                isHit: (damage, attacker) => isHitTest(this, damage, attacker)
             }
         ]);
 
