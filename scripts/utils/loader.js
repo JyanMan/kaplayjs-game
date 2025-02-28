@@ -12,6 +12,10 @@ export const load = {
                 attack: { from: 16, to: 19, loop: false, speed: 15 }
             }
         });
+        loadSprite("healthbar", '../assets/player/hp-bar.png', {
+            sliceX: 1,
+            sliceY: 2,
+        })
         loadSprite("zombie", '../assets/zombie.png', {
             sliceX: 4,
             sliceY: 4,

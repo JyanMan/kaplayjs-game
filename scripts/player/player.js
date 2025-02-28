@@ -3,6 +3,7 @@ import { normalizeVec } from "../utils/vector2.js";
 import AttackArea from "./attackArea.js";
 import { getCenterPos } from "../utils/vector2.js";
 import { isHit } from "../utils/healthModule.js";
+import HealthBar from "./healthBar.js";
 
 class Player {
     constructor(
@@ -11,31 +12,34 @@ class Player {
         health
     ) {
         this.pos = vec2(initialX, initialY);
+        this.width = 10;
+        this.height = 19;
+        
         this.speed = 250;
         this.accel = 25;
         this.moveX = 0;
+        this.isRunning = false;
+        this.runDirection = 1;
+        
         this.jumpForce = 600;
-        this.width = 10;
-        this.height = 19;
-
+        this.jumped = false;
+        
         this.dodgingTime = 0.1;
         this.dodgeRadius = 200;
         this.dodgeMin = 100;
         this.dodgeSlowTime = 0.2;
-
-        //USE STATES INSTEAD
-        this.isRunning = false;
-        this.runDirection = 1;
-        this.jumped = false;
         this.dodged = false;
         this.slowAfterDodge = false;
+
         this.attacking = false;
         this.attackDuration = 0.3;
         this.attackRadius = 15;
         this.attackDamage = 2;
 
         this.knocked = false;
+        this.maxHealth = health;
         this.health = health;
+
         this.state = "idle";
         this.animState = "idle";
         this.faceRight = false;
@@ -55,6 +59,7 @@ class Player {
                 collisionIgnore: ["player", "zombie"]
             }),
             body(),
+            color(WHITE),
             "player",
             {
                 //public properties
@@ -67,9 +72,16 @@ class Player {
         ]); 
 
         //stuff called at the start
-        this.gameObj.jumpForce = this.jumpForce;
-        this.attackArea = new AttackArea(this.gameObj);
-        this.attackArea.initialize();
+        const start = () => {
+            this.gameObj.jumpForce = this.jumpForce;
+            this.attackArea = new AttackArea(this.gameObj);
+            this.attackArea.initialize();
+
+            this.healthBar = new HealthBar(this.gameObj);
+            this.healthBar.initialize();
+
+        }
+        start();
         
         onUpdate(() => {
             this.playerInput();

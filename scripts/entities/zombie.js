@@ -30,7 +30,9 @@ class Zombie {
         this.state = "idle";
         this.animState = "idle";
 
+        this.maxHealth = health;
         this.health = health;
+
     }
 
     makeZombie() {
@@ -44,6 +46,7 @@ class Zombie {
                 collisionIgnore: ["player"]
             }),
             body(),
+            color(WHITE),
             "zombie",
             {
                 attackDamage: this.attackDamage,

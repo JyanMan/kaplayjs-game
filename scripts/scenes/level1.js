@@ -6,7 +6,7 @@ export const levelOne = () => {
     
     const groundColor = [100, 80, 70];
 
-    const player = new Player(width()/2, 0, 20);
+    const player = new Player(200, 0, 20);
     const mainFloor = new Ground(
         0, height()-100, width(), 100, groundColor
     )

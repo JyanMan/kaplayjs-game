@@ -17,6 +17,7 @@ export function isHit(entity, damage, attacker) {
     if (!entity.knocked) {
         entity.knocked = true
         knockback(entity, attacker);
+        entity.gameObj.color = BLACK;
         setKnockTimer(entity);
     }
     
@@ -29,6 +30,7 @@ export function isHit(entity, damage, attacker) {
 function setKnockTimer(entity) { //MAKE ONE FUNCTION SETTIMER NEXT TIME
     wait(0.2, () => {
         entity.knocked = false;
+        entity.gameObj.color = WHITE;
     });
 }
     
