@@ -27,7 +27,10 @@ export function isHit(entity, damage, attacker) {
     }
     
     if (entity.health <= 0) {
-        console.log("DEAD");
+        console.log(entity.gameObj);
+        // for (const child of entity.gameObj.children) {
+        //     entity.gameObj.destroy(child);
+        // }
         destroy(entity.gameObj);
     }
 }
