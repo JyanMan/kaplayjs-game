@@ -34,7 +34,7 @@ class Player {
         this.slowAfterDodge = false;
         this.dodgeAmountMax = 2;
         this.dodgeAmount = this.dodgeAmountMax;
-        this.dodgeCooldown = 1;
+        this.dodgeCooldown = 2;
 
         this.attacking = false;
         this.attackDuration = 0.3;

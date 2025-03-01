@@ -1,5 +1,6 @@
 import Zombie from "../entities/zombie.js";
 import Player from "../player/player.js"
+import { cameraAttach } from "../utils/camera.js";
 import Ground from "../utils/ground.js"
 import { Level } from "./level.js";
 import { levelMappings } from "./level1/generalMappings.js";
@@ -35,7 +36,8 @@ export const levelOne = () => {
     
     onUpdate(() => {
         //console.log(player.gameObj.pos);
-        setCamPos(player.gameObj.pos);
+        //setCamPos(player.gameObj.pos);
+        cameraAttach(player);
     });
     
     onFixedUpdate(() => {
