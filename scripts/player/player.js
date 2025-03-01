@@ -95,11 +95,11 @@ class Player {
             this.playerInput();
             this.playerAnimate();
             this.changeFaceDirection();
-            this.healthBar.drawHealthBar();
+            
 
             //console.log(this.dodgeAmount, this.dodgeAmountMax);
             //for debuggin collider
-            this.draw();
+            //this.draw();
             //console.log(this.gameObj.tag);
         });
         onFixedUpdate(() => {
