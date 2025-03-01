@@ -26,6 +26,14 @@ export const load = {
             }
         });
         loadSprite("dodgy", '../assets/player/dodge-bar.png')
+        loadSprite("block-tileset", '../assets/block-tileset.png', {
+            sliceX: 4,
+            sliceY: 4,
+            anims: {
+                tl: 0,
+                tm: 1,
+            }
+        });
     },
     playerChicken: () => {
         loadSprite("player", '../assets/player/player-with-dodge.png', {

@@ -5,6 +5,7 @@ import { getCenterPos } from "../utils/vector2.js";
 import { isHit } from "../utils/healthModule.js";
 import HealthBar from "./playerHealthBar.js";
 import DodgeBar from "./playerDodgeBar.js";
+import { mousePosWithCam } from "../utils/vector2.js";
 
 class Player {
     constructor(
@@ -81,7 +82,7 @@ class Player {
             this.attackArea = new AttackArea(this.gameObj);
             this.attackArea.initialize();
 
-            this.healthBar = new HealthBar(this.maxHealth, this.health);
+            this.healthBar = new HealthBar(this.maxHealth, this.health, this);
             this.healthBar.initialize();
 
             this.dodgeBar = new DodgeBar(this);
@@ -94,10 +95,11 @@ class Player {
             this.playerInput();
             this.playerAnimate();
             this.changeFaceDirection();
+            this.healthBar.drawHealthBar();
 
-            console.log(this.dodgeAmount, this.dodgeAmountMax);
+            //console.log(this.dodgeAmount, this.dodgeAmountMax);
             //for debuggin collider
-            //this.draw();
+            this.draw();
             //console.log(this.gameObj.tag);
         });
         onFixedUpdate(() => {
@@ -191,7 +193,6 @@ class Player {
         this.gameObj.vel = vec2(this.moveX, this.gameObj.vel.y);
         
     }
-
     moveLeftRight() {
         //limit moveX to player speed
         if (Math.abs(this.moveX) >= this.speed) {
@@ -225,9 +226,9 @@ class Player {
         this.gameObj.vel = vec2(0, 0);
 
         const selfCenter = getCenterPos(this);
-        const mouseDirX = Math.sign(mousePos().x - selfCenter.x);
+        const mouseDirX = Math.sign(mousePosWithCam().x - selfCenter.x);
         //const mouseDirX = Math.sign(mouseDirection(this).x);
-        //console.log(mousePos().x - selfCenter.x);
+        //console.log(mousePosWithCam().x - selfCenter.x);
         const targets = get("zombie");
         this.attackArea.attack(mouseDirX, targets);
         //console.log("attacking");
@@ -265,7 +266,7 @@ class Player {
         //get mouse position from player
         //get mouse direction
         const selfCenter = getCenterPos(this);
-        let mouseDelta = mousePos().sub(selfCenter); //mousePos SUBTRACT selfCenter
+        let mouseDelta = mousePosWithCam().sub(selfCenter); //mousePos SUBTRACT selfCenter
         const mouseDeltaLen = mouseDelta.len();
         const mouseDir = normalizeVec(mouseDelta, mouseDeltaLen);
 
@@ -283,10 +284,11 @@ class Player {
         this.gameObj.vel = vec2Product(mouseDelta, 8);
 
         //for debugging purposes
+        //console.log(getCamPos().sub(vec2(width()/2, height()/2)));
         drawCircle({
             pos: mouseDelta.add(selfCenter),
             radius: 20,
-            color: GREEN
+            color: BLACK
         });
     }
 
@@ -326,7 +328,7 @@ class Player {
         if (this.attacking) {
             if (this.faceMouse) {
                 this.faceMouse = false;
-                const mouseDirX = Math.sign(mousePos().x - getCenterPos(this).x);
+                const mouseDirX = Math.sign(mousePosWithCam().x - getCenterPos(this).x);
                 this.faceRight = (mouseDirX === 1) ? true : false;
             }
             return;

@@ -19,3 +19,9 @@ export function getCenterPos(obj) {
         area.offset.y*scale
     ))
 }
+
+export function mousePosWithCam() {
+    return getCamPos().sub(vec2(width()/2, height()/2)).add(
+        mousePos()
+    );
+}

@@ -1,6 +1,9 @@
 import Zombie from "../entities/zombie.js";
 import Player from "../player/player.js"
 import Ground from "../utils/ground.js"
+import { Level } from "./level.js";
+import { levelMappings } from "./level1/generalMappings.js";
+import { level1Layout } from "./level1/levelLayout.js";
 
 export const levelOne = () => {
     
@@ -19,13 +22,20 @@ export const levelOne = () => {
     
     function start() {
         player.makePlayer();
-        platform1.makeGround();
-        mainFloor.makeGround();
-        zombie.makeZombie();
-        zombie2.makeZombie();
+        //platform1.makeGround();
+        //mainFloor.makeGround();
+        //zombie.makeZombie();
+        //zombie2.makeZombie();
+
+        //console.log(levelLayout);
+
+        const level = new Level();
+        level.drawMapLayout(level1Layout, levelMappings);
     }
     
     onUpdate(() => {
+        //console.log(player.gameObj.pos);
+        //setCamPos(player.gameObj.pos);
     });
     
     onFixedUpdate(() => {
