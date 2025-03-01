@@ -38,7 +38,7 @@ class Player {
 
         this.attacking = false;
         this.attackDuration = 0.3;
-        this.attackRadius = 15;
+        this.attackRadius = 10;
         this.attackDamage = 2;
 
         this.knocked = false;
@@ -226,9 +226,10 @@ class Player {
         this.gameObj.vel = vec2(0, 0);
 
         const selfCenter = getCenterPos(this);
-        const mouseDirX = Math.sign(mousePosWithCam().x - selfCenter.x);
+        const mouseDirX = normalizeVec(mousePosWithCam().sub(selfCenter)); //Math.sign(mousePosWithCam().x - selfCenter.x);
         //const mouseDirX = Math.sign(mouseDirection(this).x);
         //console.log(mousePosWithCam().x - selfCenter.x);
+        //console.log(mouseDirX, selfCenter);
         const targets = get("zombie");
         this.attackArea.attack(mouseDirX, targets);
         //console.log("attacking");

@@ -1,6 +1,7 @@
 import AttackArea from "../player/attackArea.js";
-import { normalizeVec, vec2Product } from "../utils/vector2.js";
 import { isHit } from "../utils/healthModule.js";
+import { withinRadius } from "../utils/enemyLogic.js";
+import { normalizeVec } from "../utils/vector2.js";
 
 class Zombie {
     constructor(
@@ -10,12 +11,17 @@ class Zombie {
     ) {
         this.pos = vec2(initialX, initialY);
         this.speed = 100;
+        this.speedTypes = [40, 50, 60, 90]
         this.accel = this.speed/10;
         this.width = 10;
         this.height = 28;
         this.moveX = 0;
 
-        this.attackRadius = 40;
+        this.attackRadius = 60;
+        this.followRange = 600;
+
+        this.onJumpCooldown = false;
+        this.jumpCooldown = 4;
 
         this.isWalking = false;
         this.attacking = false;
@@ -32,6 +38,7 @@ class Zombie {
 
         this.maxHealth = health;
         this.health = health;
+        this.makeZombie();
 
     }
 
@@ -43,14 +50,14 @@ class Zombie {
             area({
                 shape: new Rect(vec2(this.width/2, this.height/2), this.width, this.height),
                 offset: vec2(6, -10),
-                collisionIgnore: ["player"]
+                collisionIgnore: ["player", "zombie"]
             }),
             body(),
             color(WHITE),
             "zombie",
             {
                 attackDamage: this.attackDamage,
-                attackRadius: this.attackRadius/4,
+                attackRadius: this.attackRadius*0.2,
                 attackDuration: this.attackDuration,
                 knockStrength: 150,
                 isHit: (entity, damage, attacker) => isHit(this, damage, attacker)
@@ -58,13 +65,16 @@ class Zombie {
         ]);
 
         this.start = () => {
-
+            this.gameObj.jumpForce = 400;
             this.attackArea = new AttackArea(this.gameObj);
             this.attackArea.initialize();
-            //randomize this.speed
-            const randomNum = (Math.random()*0.5)+0.5;
-            //console.log(randomNum);
-            this.speed = this.speed*randomNum;
+            // //randomize this.speed
+            // const randomNum = (Math.random()*0.5)+0.5;
+            // //console.log(randomNum);
+            // this.speed = this.speed*randomNum;
+            const randomNum = Math.floor(Math.random()*this.speedTypes.length);
+            console.log(randomNum)
+            this.speed = this.speedTypes[randomNum];
             this.accel = this.speed/10;
         }
         this.start();
@@ -112,13 +122,16 @@ class Zombie {
     
     followPlayer() {
         const player = get("player")[0];
-        if (!player) {
+        //console.log(withinRadius(this.gameObj, player, this.followRange));
+        this.gameObj.vel = vec2(this.moveX, this.gameObj.vel.y);
+
+        if (!player || !withinRadius(this.gameObj, player, this.followRange)) {
             this.isWalking = false;
-            return
+            this.moveX = 0;
+            return;
         }
 
         const distanceToPlayer = player.pos.sub(this.gameObj.pos);
-        this.gameObj.vel = vec2(this.moveX, this.gameObj.vel.y);
         
         if (Math.abs(distanceToPlayer.x) <= this.attackRadius) {
             this.isWalking = false;
@@ -126,14 +139,17 @@ class Zombie {
 
                 this.attack();
             }
-            if (Math.abs(this.moveX) > this.accel) {
-                this.moveX -= this.accel*Math.sign(this.moveX);
-            }
-            else {
-                this.moveX = 0;
-            }
-            return;
+            // if (Math.abs(this.moveX) > this.accel) {
+            //     this.moveX -= this.accel*Math.sign(this.moveX);
+            // }
+            // else {
+            //     this.moveX = 0;
+            // }
+            // return;
         }
+
+        this.onJumpLogic(distanceToPlayer);
+
         this.isWalking = true;
         //console.log(distanceToPlayer);
 
@@ -142,12 +158,41 @@ class Zombie {
         if (Math.abs(this.moveX) >= this.speed) {
             this.moveX = Math.sign(this.moveX)*this.speed;        
         }
+    }
 
+    onJumpLogic(distance) {
+        const distanceY = distance.y; 
+        if (!this.gameObj.isGrounded()) {
+            return;
+        }
+        if (this.onJumpCooldown) {
+            return;
+        }
+        if (distanceY < 0) {
+            //console.log(distanceY);
+            this.gameObj.jump();
+            this.onJumpCooldown = true;
+            this.setJumpCooldown();
+        }
+    }
+
+    setJumpCooldown() {
+        wait(this.jumpCooldown, () => {
+            this.onJumpCooldown = false;
+        })
     }
 
     animation() {
         //console.log(this.attacked);
-        if (this.attacked) {
+        if (!this.gameObj.isGrounded()) {
+            if (this.gameObj.vel < 0) {
+                this.state = "rising";
+            }
+            else {
+                this.state = "falling";
+            }
+        }
+        else if (this.attacked) {
             this.state = "attack";
         }
         else if (this.isWalking) {
@@ -160,12 +205,20 @@ class Zombie {
         const currentAnim =
             (this.state === "run") ? "run" :
             (this.state === "attack") ? "attack" :
+            (this.state === "rising") ? "rise" :
+            (this.state === "falling") ? "fall" :
             "idle";
         
         if (currentAnim !== this.animState) {
             //console.log("asfadf");
             this.animState = currentAnim;
-            this.gameObj.play(currentAnim);
+            if (currentAnim === "run") {
+                this.gameObj.play(currentAnim, {speed: this.speed/10});
+            }
+            else {
+
+                this.gameObj.play(currentAnim);
+            }
         }
         
         this.gameObj.flipX = !this.faceRight;
@@ -192,10 +245,12 @@ class Zombie {
         this.attacked = true;
         //console.log("attacked");
     }
-
+    
     attackTarget() {
         const players = get("player");
-        const attackDir = (this.faceRight) ? 1 : -1;
+        const player = players[0];
+        //const attackDir = (this.faceRight) ? 1 : -1;
+        const attackDir = normalizeVec(player.pos.sub(this.gameObj.pos));
         this.attackArea.attack(attackDir, players);
     }
 

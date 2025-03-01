@@ -14,6 +14,6 @@ function generateMappings(tiletype) {
             area(),
             body({ isStatic: true }),
             offscreen()
-        ],
+        ]
     }
 }

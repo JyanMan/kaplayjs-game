@@ -22,7 +22,9 @@ export const load = {
             anims: {
                 idle: { from: 0, to: 2, loop: true, speed: 3 },
                 run: { from: 3, to: 7, loop: true },
-                attack: { from: 10, to: 15, loop: false, speed: 10}
+                attack: { from: 10, to: 15, loop: false, speed: 10},
+                rise: 8,
+                fall: 9
             }
         });
         loadSprite("dodgy", '../assets/player/dodge-bar.png')

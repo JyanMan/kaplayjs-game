@@ -27,10 +27,7 @@ class DodgeBar {
     updateDodgies() {
         const dodgeMax = this.owner.dodgeAmountMax;
         const dodgeAmount = this.owner.dodgeAmount;
-        // if (dodgeAmount === dodgeMax) {
-        //     return;
-        // }
-        console.log("adfsdf");
+        
         for (let i = dodgeMax-1; i >= 0; i--) {
             if (i >= dodgeAmount) {
                 this.dodgies[i].color = BLACK;

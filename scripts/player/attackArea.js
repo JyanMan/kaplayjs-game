@@ -1,3 +1,5 @@
+import { vec2Product } from "../utils/vector2.js";
+
 class AttackArea {
     constructor(attacker) {
         //USE TARGET VARIABLE
@@ -59,7 +61,7 @@ class AttackArea {
         this.colliderColor = GREEN;
         //console.log("attacking");
         //console.log(this.gameObj.pos.x);
-        this.gameObj.pos = vec2(this.radius*direction/2, 0)
+        this.gameObj.pos = vec2Product(direction, this.radius) //vec2(this.radius*direction/2, 0)
         .add(
             vec2(
                 this.attacker.width/2,
