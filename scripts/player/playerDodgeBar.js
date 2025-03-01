@@ -7,30 +7,37 @@ class DodgeBar {
     }
     
     initialize() {
+        const dodgeMax = this.owner.dodgeAmountMax;
+        //const dodgeAmount = this.owner.dodgeAmount;
+        const gap = 40;
+        this.dodgies = [];
+        for (let i = 0; i < dodgeMax; i++) {
+            this.dodgies.push(add([
+                sprite("dodgy"),
+                fixed(),
+                pos(gap*i, gap),
+                scale(2),
+                color(WHITE)
+            ]))
+        }
         onUpdate(() => {
-            this.pos = getCamLeftEnd();
-            this.drawDodgies();
-        }) 
+            this.updateDodgies();
+        })
     }
-    
-    drawDodgies() {
+
+    updateDodgies() {
         const dodgeMax = this.owner.dodgeAmountMax;
         const dodgeAmount = this.owner.dodgeAmount;
-        const width = 50;
-        const gap = 40;
-        for (let i = 0; i < dodgeMax; i++) {
-            drawSprite({
-                sprite: "dodgy",
-                pos: this.pos.add(vec2(gap*i, 40)),
-                width: width,
-                color: BLACK,
-            })
-            if (i < dodgeAmount) {
-                drawSprite({
-                    sprite: "dodgy",
-                    pos: this.pos.add(vec2(gap*i, 40)),
-                    width: width, 
-                })
+        // if (dodgeAmount === dodgeMax) {
+        //     return;
+        // }
+        console.log("adfsdf");
+        for (let i = dodgeMax-1; i >= 0; i--) {
+            if (i >= dodgeAmount) {
+                this.dodgies[i].color = BLACK;
+            }
+            else {
+                this.dodgies[i].color = WHITE;
             }
         }
     }
