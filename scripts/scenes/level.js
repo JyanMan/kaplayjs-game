@@ -7,7 +7,7 @@ export class Level {
             tileHeight: 32,
             tiles: mappings
         }
-        console.log(levelLayout);
+        //console.log(levelLayout);
 
         const layer = addLevel(levelLayout, layerSettings)
         layer.use(scale(2)); 

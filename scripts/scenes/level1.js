@@ -24,7 +24,7 @@ export const levelOne = () => {
         player.makePlayer();
         //platform1.makeGround();
         //mainFloor.makeGround();
-        //zombie.makeZombie();
+        zombie.makeZombie();
         //zombie2.makeZombie();
 
         //console.log(levelLayout);
