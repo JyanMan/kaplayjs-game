@@ -135,10 +135,11 @@ class Zombie {
         
         if (Math.abs(distanceToPlayer.x) <= this.attackRadius) {
             this.isWalking = false;
-            if (Math.abs(distanceToPlayer.y) <= this.attackRadius) {
+            this.attack();
+            // if (Math.abs(distanceToPlayer.y) <= this.attackRadius) {
 
-                this.attack();
-            }
+            //     this.attack();
+            // }
             // if (Math.abs(this.moveX) > this.accel) {
             //     this.moveX -= this.accel*Math.sign(this.moveX);
             // }
