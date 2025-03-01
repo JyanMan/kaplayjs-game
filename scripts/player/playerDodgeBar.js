@@ -1,5 +1,3 @@
-import { getCamLeftEnd } from "../utils/camera.js";
-
 class DodgeBar {
     constructor(owner) {
         this.owner = owner;
@@ -17,7 +15,8 @@ class DodgeBar {
                 fixed(),
                 pos(gap*i, gap),
                 scale(2),
-                color(WHITE)
+                color(WHITE),
+                z(1)
             ]))
         }
         onUpdate(() => {

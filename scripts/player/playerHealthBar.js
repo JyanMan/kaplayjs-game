@@ -1,5 +1,3 @@
-import { getCamLeftEnd } from "../utils/camera.js";
-
 class HealthBar {
     constructor(maxHealth, currentHealth, owner) {
         this.owner = owner;
@@ -13,12 +11,14 @@ class HealthBar {
             fixed(),
             sprite("healthbar", {frame: 1}),
             scale(4),   
+            z(1)
         ])
         this.currentHealthObj = add([
             fixed(),
             sprite("healthbar", {frame: 0}),
             scale(4),
-            pos(0, 0)
+            pos(0, 0),
+            z(2)
         ])
     }
 
