@@ -22,20 +22,20 @@ export const levelOne = () => {
     
     function start() {
         player.makePlayer();
-        platform1.makeGround();
-        mainFloor.makeGround();
+        //platform1.makeGround();
+        //mainFloor.makeGround();
         //zombie.makeZombie();
         //zombie2.makeZombie();
 
         //console.log(levelLayout);
 
-        //const level = new Level();
-        //level.drawMapLayout(level1Layout, levelMappings);
+        const level = new Level();
+        level.drawMapLayout(level1Layout, levelMappings);
     }
     
     onUpdate(() => {
         //console.log(player.gameObj.pos);
-        //setCamPos(player.gameObj.pos);
+        setCamPos(player.gameObj.pos);
     });
     
     onFixedUpdate(() => {

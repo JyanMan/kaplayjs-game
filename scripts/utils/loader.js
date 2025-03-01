@@ -26,6 +26,7 @@ export const load = {
             }
         });
         loadSprite("dodgy", '../assets/player/dodge-bar.png')
+        //loadSprite("dodgy2", '../assets/player/dodge-bar.png')
         loadSprite("block-tileset", '../assets/block-tileset.png', {
             sliceX: 4,
             sliceY: 4,

@@ -1,3 +1,5 @@
+import { getCamLeftEnd } from "../utils/camera.js";
+
 class HealthBar {
     constructor(maxHealth, currentHealth, owner) {
         this.owner = owner;
@@ -13,15 +15,9 @@ class HealthBar {
         
         //setup currenthealthwidth;
         this.updateHealthBar(this.maxHealth, this.currentHealth)
-        //this.pos = this.owner.gameObj.pos;
-
+        
         onUpdate(() => {
-            drawRect({
-                pos: this.owner.gameObj.pos,
-                width: 100,
-                height: 100,
-                color: BLACK
-            })
+            this.pos = getCamLeftEnd();
             //console.log("asdf");
             drawSprite({
                 sprite: "healthbar",
@@ -35,7 +31,9 @@ class HealthBar {
                 width: this.currentHealthWidth, 
                 height: this.barHeight,
                 //THIS HEALTH WIDTH FORMULA IS A TEMPORARY SOLUTION
-                pos: vec2((this.emptyHealthWidth-this.currentHealthWidth)/6, 0),
+                pos: this.pos.add(
+                    vec2((this.emptyHealthWidth-this.currentHealthWidth)/6, 0),
+                ),
                 frame: 0,
             })
             //console.log(this.currentHealthWidth);
