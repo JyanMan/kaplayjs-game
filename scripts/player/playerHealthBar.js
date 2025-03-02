@@ -25,7 +25,7 @@ class HealthBar {
     updateHealthBar(maxHealth, currentHealth) {
         console.log(maxHealth, currentHealth);
         if (currentHealth <= 0) {
-            this.currentHealthObj.width = this.emptyHealthObj.width;
+            this.currentHealthObj.width = 1;
             return;
         }
 

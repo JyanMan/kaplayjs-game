@@ -31,6 +31,6 @@ export const levelOne = () => {
     onFixedUpdate(() => {
     });
     
-    setGravity(1200);
+    setGravity(1000);
     start();
 }

@@ -57,7 +57,7 @@ class Zombie {
             "zombie",
             {
                 attackDamage: this.attackDamage,
-                attackRadius: this.attackRadius*0.2,
+                attackRadius: this.attackRadius*0.25,
                 attackDuration: this.attackDuration,
                 knockStrength: 150,
                 isHit: (entity, damage, attacker) => isHit(this, damage, attacker)
@@ -133,8 +133,8 @@ class Zombie {
 
         const distanceToPlayer = player.pos.sub(this.gameObj.pos);
         
-        if (Math.abs(distanceToPlayer.x) <= this.attackRadius) {
-            this.isWalking = false;
+        if (distanceToPlayer.len() <= this.attackRadius) {
+            //this.isWalking = false;
             this.attack();
             // if (Math.abs(distanceToPlayer.y) <= this.attackRadius) {
 
@@ -163,23 +163,34 @@ class Zombie {
 
     onJumpLogic(distance) {
         const distanceY = distance.y; 
-        if (!this.gameObj.isGrounded()) {
-            return;
-        }
+        // if (!this.gameObj.isGrounded()) {
+        //     return;
+        // }
         if (this.onJumpCooldown) {
             return;
         }
-        if (distanceY < 0) {
-            //console.log(distanceY);
-            this.gameObj.jump();
-            this.onJumpCooldown = true;
-            this.setJumpCooldown();
-        }
+        this.onJumpCooldown = true;
+        this.setJumpOnDelay(distanceY);
+        // if (distanceY < 0) {
+        //     //console.log(distanceY);
+        //     this.onJumpCooldown = true;
+        //     this.gameObj.jump();
+        //     this.setJumpCooldown();
+        // }
     }
 
-    setJumpCooldown() {
-        wait(this.jumpCooldown, () => {
-            this.onJumpCooldown = false;
+    setJumpOnDelay(distanceY) {
+        wait(this.jumpCooldown/2, () => {
+            
+            if (!this.gameObj.isGrounded()) {
+                return;
+            }
+            if (distanceY < 0) {
+                this.gameObj.jump();
+            }
+            wait(this.jumpCooldown/2, () => {
+                this.onJumpCooldown = false;
+            })
         })
     }
 

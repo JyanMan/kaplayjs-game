@@ -23,12 +23,12 @@ class Player {
         this.isRunning = false;
         this.runDirection = 1;
         
-        this.jumpForce = 600;
+        this.jumpForce = 500;
         this.jumped = false;
         
         this.dodgingTime = 0.1;
-        this.dodgeRadius = 200;
-        this.dodgeMin = 100;
+        this.dodgeRadius = 150;
+        this.dodgeMin = 80;
         this.dodgeSlowTime = 0.2;
         this.dodged = false;
         this.slowAfterDodge = false;
@@ -38,7 +38,7 @@ class Player {
 
         this.attacking = false;
         this.attackDuration = 0.3;
-        this.attackRadius = 10;
+        this.attackRadius = 17;
         this.attackDamage = 2;
 
         this.knocked = false;

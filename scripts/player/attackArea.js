@@ -29,7 +29,7 @@ class AttackArea {
         ])
 
         onUpdate(() => {
-            //this.draw();
+            this.draw();
            // console.log(this.attacker.attackRadius);
         }) 
     }
@@ -61,7 +61,7 @@ class AttackArea {
         this.colliderColor = GREEN;
         //console.log("attacking");
         //console.log(this.gameObj.pos.x);
-        this.gameObj.pos = vec2Product(direction, this.radius) //vec2(this.radius*direction/2, 0)
+        this.gameObj.pos = vec2Product(direction, this.radius/2) //vec2(this.radius*direction/2, 0)
         .add(
             vec2(
                 this.attacker.width/2,
