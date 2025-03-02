@@ -1,4 +1,3 @@
-import Zombie from "../../entities/zombie.js";
 import Player from "../../player/player.js"
 import { cameraAttach } from "../../utils/camera.js";
 import { Level } from "../level.js";
@@ -13,14 +12,14 @@ export const levelOne = () => {
     const player = new Player(200, 0, 20)
     
     function start() {
-        player.makePlayer();
         
         //const zombie = new Zombie(width()/2, 20, 10);
         const level = new Level();
         level.drawMapLayout(level1Layout, levelMappings);
         level.drawBackground(4);
-
+        
         generateLevel1Entities();
+        player.makePlayer();
     }
     
     onUpdate(() => {

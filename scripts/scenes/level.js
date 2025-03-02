@@ -11,8 +11,8 @@ export class Level {
     drawMapLayout(levelLayout, mappings) {
         //console.log(levelLayout);
         const layerSettings = {
-            tileWidth: 32,
-            tileHeight: 32,
+            tileWidth: 24,
+            tileHeight: 24,
             tiles: mappings
         }
         //console.log(levelLayout);

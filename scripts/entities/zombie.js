@@ -63,7 +63,8 @@ class Zombie {
                 attackDuration: this.attackDuration,
                 knockStrength: 150,
                 isHit: (entity, damage, attacker) => isHit(this, damage, attacker)
-            }
+            },
+            offscreen({ hide: true }),
         ]);
 
         this.start = () => {

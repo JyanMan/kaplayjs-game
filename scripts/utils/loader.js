@@ -38,6 +38,18 @@ export const load = {
                 tm: 1,
             }
         });
+        loadSprite("mr-tileset", '../assets/mr-platformer/Tiles/combined-tilesheet.png', {
+            sliceX: 39,
+            sliceY: 1,
+            anims: {
+                tl: 0,
+                tm: 1,
+                g: 5,
+                d: 2,
+                l: 3,
+                r: 4,
+            }
+        });
     },
     playerChicken: () => {
         loadSprite("player", '../assets/player/player-with-dodge.png', {

@@ -52,20 +52,14 @@ class AttackArea {
     }
 
     attack(direction, targets) {
-        console.log("called");
-        //console.log("existing")
-        //console.log("asdfasdf");
         if (this.attacking) {
             this.attackTarget(this.attacker.attackDamage, targets);
             return;
         }
-        //console.log("asdf")
         this.attacking = true;
         this.setTimer(this.attacker.attackDuration);
         console.log("GREENED");
         this.colliderColor = GREEN;
-        //console.log("attacking");
-        //console.log(this.gameObj.pos.x);
         this.gameObj.pos = vec2Product(direction, this.radius/2) //vec2(this.radius*direction/2, 0)
         .add(
             vec2(
@@ -81,7 +75,6 @@ class AttackArea {
         if (targets.length === 0) {
             return;
         }
-        //console.log(targets);
 
         targets.forEach((target) => {
             
