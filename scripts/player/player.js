@@ -49,6 +49,8 @@ class Player {
         this.animState = "idle";
         this.faceRight = false;
         this.faceMouse = true;
+
+        this.objDestroyed = false;
     }
     
     makePlayer() {

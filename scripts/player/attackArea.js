@@ -29,11 +29,14 @@ class AttackArea {
         ])
 
         onUpdate(() => {
-            this.draw();
+            //this.draw();
            // console.log(this.attacker.attackRadius);
         }) 
     }
     draw() {
+        if (!this.gameObj) {
+            return;
+        }
         const obj = this.gameObj;
         const objVertices = obj.worldArea().pts
         drawPolygon({
@@ -49,6 +52,7 @@ class AttackArea {
     }
 
     attack(direction, targets) {
+        console.log("called");
         //console.log("existing")
         //console.log("asdfasdf");
         if (this.attacking) {
@@ -58,6 +62,7 @@ class AttackArea {
         //console.log("asdf")
         this.attacking = true;
         this.setTimer(this.attacker.attackDuration);
+        console.log("GREENED");
         this.colliderColor = GREEN;
         //console.log("attacking");
         //console.log(this.gameObj.pos.x);

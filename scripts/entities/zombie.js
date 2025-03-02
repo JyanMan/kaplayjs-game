@@ -40,6 +40,8 @@ class Zombie {
         this.health = health;
         this.makeZombie();
 
+        this.objDestroyed = false
+
     }
 
     makeZombie() {
@@ -80,10 +82,12 @@ class Zombie {
         this.start();
 
         onUpdate(() => {
+            if (this.objDestroyed) return;
             this.animation();
             //this.draw();
         }) 
         onFixedUpdate(() => {
+            if (this.objDestroyed) return;
             this.move();
             //this.attackIfOnRange();
         });
@@ -121,6 +125,7 @@ class Zombie {
     }
     
     followPlayer() {
+        //console.log(this.gameObj);
         const player = get("player")[0];
         //console.log(withinRadius(this.gameObj, player, this.followRange));
         this.gameObj.vel = vec2(this.moveX, this.gameObj.vel.y);
@@ -135,6 +140,7 @@ class Zombie {
         
         if (distanceToPlayer.len() <= this.attackRadius) {
             //this.isWalking = false;
+            console.log("asgasdgasdgasgasdgasgasdg");
             this.attack();
             // if (Math.abs(distanceToPlayer.y) <= this.attackRadius) {
 
@@ -259,6 +265,7 @@ class Zombie {
     }
     
     attackTarget() {
+        console.log("ATTACK PLAYER");
         const players = get("player");
         const player = players[0];
         //const attackDir = (this.faceRight) ? 1 : -1;
@@ -273,6 +280,10 @@ class Zombie {
         wait(this.attackCooldown, () => {
             this.attackCoolingDown = false;
         })
+    }
+
+    destroySelf() {
+        destroy(this.gameObj); 
     }
 }
 

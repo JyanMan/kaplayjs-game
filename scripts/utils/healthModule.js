@@ -11,7 +11,7 @@ export function isHit(entity, damage, attacker) {
         return;
     }
     entity.health -= damage;
-    console.log(entity.health);
+   // console.log(entity.health);
     //console.log(this.health);
 
     if (entity.healthBar) {
@@ -27,11 +27,15 @@ export function isHit(entity, damage, attacker) {
     }
     
     if (entity.health <= 0) {
-        console.log(entity.gameObj);
+        //console.log(entity.gameObj);
         for (const child of entity.gameObj.children) {
             entity.gameObj.destroy(child);
         }
+        //entity.destroySelf();
+        console.log("before ", entity.gameObj);
+        entity.objDestroyed = true;
         destroy(entity.gameObj);
+        console.log("after", entity.gameObj);
     }
 }
 
