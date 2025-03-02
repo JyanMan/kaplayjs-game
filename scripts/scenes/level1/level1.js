@@ -18,6 +18,7 @@ export const levelOne = () => {
         //const zombie = new Zombie(width()/2, 20, 10);
         const level = new Level();
         level.drawMapLayout(level1Layout, levelMappings);
+        level.drawBackground(4);
 
         generateLevel1Entities();
     }

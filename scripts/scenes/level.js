@@ -1,4 +1,12 @@
 export class Level {
+    drawBackground(scaleValue) {
+        add([
+            sprite("background"),
+            scale(scaleValue),
+            fixed(),
+            z(-1)
+        ])
+    }
 
     drawMapLayout(levelLayout, mappings) {
         //console.log(levelLayout);

@@ -2,6 +2,7 @@
 import kaplay from "./lib/kaplay.mjs";
 import { load } from "./scripts/utils/loader.js";
 import { levelOne } from "./scripts/scenes/level1/level1.js";
+import { uiManager } from "./scripts/utils/UIManager.js";
 
 kaplay({
     width: 1280,
@@ -32,6 +33,9 @@ kaplay({
 load.assets();
 
 const scenes = {
+    menu: () => {
+        uiManager.displayMainMenu();
+    },
     level1: () => {
         levelOne();
     },
@@ -44,4 +48,4 @@ for (let key of Object.keys(scenes)) {
     scene(key, scenes[key]);
 }
 
-go("level1"); 
+go("menu"); 

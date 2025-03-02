@@ -1,5 +1,6 @@
 export const load = {
     assets: () => {
+        loadSprite("background", '../assets/mr-platformer/Backgrounds/merged-full-background.png');
         loadSprite("player", '../assets/player/player-with-dodge.png', {
             sliceX: 6,
             sliceY: 6,
