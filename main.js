@@ -1,5 +1,5 @@
-//import kaplay from "https://unpkg.com/kaplay@3001/dist/kaplay.mjs";
-import kaplay from "./lib/kaplay.mjs";
+import kaplay from "https://unpkg.com/kaplay@3001/dist/kaplay.mjs";
+//import kaplay from "./lib/kaplay.mjs";
 import { load } from "./scripts/utils/loader.js";
 import { levelOne } from "./scripts/scenes/level1/level1.js";
 import { uiManager } from "./scripts/utils/UIManager.js";

@@ -4,15 +4,8 @@ class UIManager {
             sprite("background"),
             scale(4)
         ])
-        const startButton = add([
-            text("Click to Start"),
-            pos(center()),
-            anchor("center"),
-            scale(4)
-        ])
 
         onMousePress(("left"), () => {
-            console.log("start");
             go("level1");
         })
     }

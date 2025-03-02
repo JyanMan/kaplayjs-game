@@ -68,7 +68,7 @@ class Zombie {
         ]);
 
         this.start = () => {
-            this.gameObj.jumpForce = 400;
+            this.gameObj.jumpForce = 500;
             this.attackArea = new AttackArea(this.gameObj);
             this.attackArea.initialize();
             // //randomize this.speed
@@ -76,7 +76,6 @@ class Zombie {
             // //console.log(randomNum);
             // this.speed = this.speed*randomNum;
             const randomNum = Math.floor(Math.random()*this.speedTypes.length);
-            console.log(randomNum)
             this.speed = this.speedTypes[randomNum];
             this.accel = this.speed/10;
         }
@@ -141,7 +140,6 @@ class Zombie {
         
         if (distanceToPlayer.len() <= this.attackRadius) {
             //this.isWalking = false;
-            console.log("asgasdgasdgasgasdgasgasdg");
             this.attack();
             // if (Math.abs(distanceToPlayer.y) <= this.attackRadius) {
 
@@ -266,7 +264,6 @@ class Zombie {
     }
     
     attackTarget() {
-        console.log("ATTACK PLAYER");
         const players = get("player");
         const player = players[0];
         //const attackDir = (this.faceRight) ? 1 : -1;

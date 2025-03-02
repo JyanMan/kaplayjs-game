@@ -23,7 +23,7 @@ class Player {
         this.isRunning = false;
         this.runDirection = 1;
         
-        this.jumpForce = 500;
+        this.jumpForce = 700;
         this.jumped = false;
         
         this.dodgingTime = 0.1;
@@ -97,6 +97,7 @@ class Player {
             this.playerInput();
             this.playerAnimate();
             this.changeFaceDirection();
+            //console.log(fps());
             
 
             //console.log(this.dodgeAmount, this.dodgeAmountMax);
@@ -192,7 +193,7 @@ class Player {
         
         this.moveLeftRight();
         //move player based on movex
-        this.gameObj.vel = vec2(this.moveX, this.gameObj.vel.y);
+        this.gameObj.vel = vec2(this.moveX*dt()*40, this.gameObj.vel.y);
         
     }
     moveLeftRight() {
@@ -278,7 +279,7 @@ class Player {
             mouseDelta = vec2Product(mouseDir, this.dodgeMin);
         }
         else if (mouseDeltaLen >= this.dodgeRadius) {
-            mouseDelta = vec2Product(mouseDir, this.dodgeRadius)
+            mouseDelta = vec2Product(mouseDir, this.dodgeRadius*dt()*50)
         }
 
         //move player to mouse position

@@ -11,11 +11,8 @@ export function isHit(entity, damage, attacker) {
         return;
     }
     entity.health -= damage;
-   // console.log(entity.health);
-    //console.log(this.health);
 
     if (entity.healthBar) {
-        console.log("asdfadf");
         entity.healthBar.updateHealthBar(entity.maxHealth, entity.health);
     }
     
@@ -27,15 +24,11 @@ export function isHit(entity, damage, attacker) {
     }
     
     if (entity.health <= 0) {
-        //console.log(entity.gameObj);
         for (const child of entity.gameObj.children) {
             entity.gameObj.destroy(child);
         }
-        //entity.destroySelf();
-        console.log("before ", entity.gameObj);
         entity.objDestroyed = true;
         destroy(entity.gameObj);
-        console.log("after", entity.gameObj);
     }
 }
 
@@ -48,9 +41,5 @@ function setKnockTimer(entity) { //MAKE ONE FUNCTION SETTIMER NEXT TIME
     
 function knockback(entity, attacker) {
     const knockDirection = normalizeVec(entity.gameObj.pos.sub(attacker.pos));
-    //console.log(knockDirection);
-    //console.log(this.gameObj.vel);
     entity.gameObj.vel = vec2Product(knockDirection, attacker.knockStrength*2);
-    //this.gameObj.addForce(vec2Product(knockDirection, attacker.knockStrength*100));
-    //this.gameObj.vel = knockDirection*attacker.knockStrength;
 }
