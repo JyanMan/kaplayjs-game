@@ -98,6 +98,11 @@ class Player {
             this.dodgeBar = new DodgeBar(this);
             this.dodgeBar.initialize();
 
+            this.gameObj.onCollide((obj) => {
+                if (obj.tags.includes('end-crystal')) {
+                    this.finishLevel();
+                }
+            })
         }
         start();
         
@@ -105,6 +110,7 @@ class Player {
             this.playerInput();
             this.playerAnimate();
             this.changeFaceDirection();
+            //console.log(get('end-crystal'));
             //console.log(fps());
             
 
@@ -116,7 +122,6 @@ class Player {
         onFixedUpdate(() => {
             //this.playerMove();
             this.action();
-            this.finishLevel();
         });
     }
 
@@ -207,7 +212,6 @@ class Player {
         
         this.moveLeftRight();
         //move player based on movex
-        console.log(dt());
         this.gameObj.vel = vec2(this.moveX*dt()*50, this.gameObj.vel.y*dt()*50);
         
     }
@@ -360,13 +364,10 @@ class Player {
     }
     
     finishLevel() {
-        const endCrystal = get("endCrystal")[0];
-        if (!endCrystal) {
+        if (get('enemy').length > 0) {
             return;
         }
-        if (this.gameObj.isColliding(endCrystal)) {
-            console.log("level is finished");
-        }
+        go('menu');
     }
 }
 

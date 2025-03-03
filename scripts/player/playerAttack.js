@@ -24,7 +24,7 @@ export function playerShoot(player) {
         offscreen({ hide: true }),
         area({
             shape: new Rect(vec2(0,0), width, width),
-            collisionIgnore: ['player', 'attackArea']
+            collisionIgnore: ['player', 'attackArea', 'end-crystal']
         }),
         {
             knockStrength: knockStrength,
@@ -75,5 +75,5 @@ export function playerSword(player) {
     const targets = get("zombie");
     player.attackArea.attack(mouseDir, targets);
 
-    player.gameObj.vel = vec2(Math.sign(mouseDir.x)*100, 0);
+    player.gameObj.vel = vec2(Math.sign(mouseDir.x)*50, 0);
 }

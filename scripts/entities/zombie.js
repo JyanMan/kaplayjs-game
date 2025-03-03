@@ -56,7 +56,7 @@ class Zombie {
             }),
             body(),
             color(WHITE),
-            "zombie",
+            'zombie', 'enemy',
             {
                 attackDamage: this.attackDamage,
                 attackRadius: this.attackRadius*0.25,
@@ -71,10 +71,7 @@ class Zombie {
             this.gameObj.jumpForce = 500;
             this.attackArea = new AttackArea(this.gameObj);
             this.attackArea.initialize();
-            // //randomize this.speed
-            // const randomNum = (Math.random()*0.5)+0.5;
-            // //console.log(randomNum);
-            // this.speed = this.speed*randomNum;
+
             const randomNum = Math.floor(Math.random()*this.speedTypes.length);
             this.speed = this.speedTypes[randomNum];
             this.accel = this.speed/10;
@@ -153,7 +150,7 @@ class Zombie {
     }
 
     onJumpLogic(distanceY) {
-        if (this.onJumpCooldown || distanceY >= 0) {
+        if (!this.gameObj.isGrounded() || this.onJumpCooldown || distanceY >= 0) {
             return;
         }
         this.onJumpCooldown = true;
@@ -161,14 +158,14 @@ class Zombie {
     }
 
     setJumpOnDelay() {
-        wait(this.jumpCooldown*0.2, () => {
+        wait(this.jumpCooldown*0.15, () => {
             
             if (!this.gameObj.isGrounded()) {
                 this.onJumpCooldown = false;
                 return;
             }
             this.gameObj.jump();
-            wait(this.jumpCooldown*0.8, () => {
+            wait(this.jumpCooldown*0.85, () => {
                 this.onJumpCooldown = false;
             })
         })

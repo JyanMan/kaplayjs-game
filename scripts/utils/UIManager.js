@@ -8,6 +8,12 @@ class UIManager {
         onMousePress(("left"), () => {
             go("level1");
         })
+        const welcomeText = add([
+            text("click Anywhere To Start"),
+            pos(center()),
+            scale(2),
+            anchor("center")
+        ])
     }
 
     displayLevels() {

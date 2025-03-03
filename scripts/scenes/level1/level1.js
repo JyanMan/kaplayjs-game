@@ -23,9 +23,6 @@ export const levelOne = () => {
         cameraAttach(player);
     });
     
-    onFixedUpdate(() => {
-    });
-    
     setGravity(1600);
     start();
 }
