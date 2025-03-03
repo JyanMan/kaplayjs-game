@@ -16,8 +16,16 @@ export class Level {
             tiles: mappings,
         }
         //console.log(levelLayout);
+        this.layers = []
+        for (const layer of levelLayout) {
+            this.layers.push(addLevel(layer, layerSettings))
+        }
+        console.log(this.layers);
+        for (const layer of this.layers) {
+            layer.use(scale(4));
+        }
 
-        const layer = addLevel(levelLayout, layerSettings)
-        layer.use(scale(4));
+        // const layer = addLevel(levelLayout, layerSettings)
+        // layer.use(scale(4));
     }
 }

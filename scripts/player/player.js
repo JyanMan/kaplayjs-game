@@ -38,7 +38,7 @@ class Player {
 
         this.attacking = false;
         this.attackDuration = 0.3;
-        this.attackCooldown = 0.3;
+        this.attackCooldown = 0.1;
         this.attackCoolingDown = false;
         this.attackRadius = 17;
         this.attackDamage = 2;
@@ -224,13 +224,14 @@ class Player {
     
     attack() {
         this.moveX = 0;
-        this.gameObj.vel = vec2(0, 0);
-
+        
         const selfCenter = getCenterPos(this);
-        const mouseDirX = normalizeVec(mousePosWithCam().sub(selfCenter)); //Math.sign(mousePosWithCam().x - selfCenter.x);
+        const mouseDir = normalizeVec(mousePosWithCam().sub(selfCenter)); //Math.sign(mousePosWithCam().x - selfCenter.x);
         
         const targets = get("zombie");
-        this.attackArea.attack(mouseDirX, targets);
+        this.attackArea.attack(mouseDir, targets);
+
+        this.gameObj.vel = vec2(Math.sign(mouseDir.x)*100, 0);
     }
     setAttackCooldown() {
         this.attackCoolingDown = true;
@@ -302,11 +303,11 @@ class Player {
         if (this.dodged || this.slowAfterDodge) {
             this.state = "dodging";
         }
-        else if (!this.gameObj.isGrounded()) {
-            this.state = (this.gameObj.vel.y < 0) ? "rising" : "falling";
-        }
         else if (this.attacking) {
             this.state = "attack";
+        }
+        else if (!this.gameObj.isGrounded()) {
+            this.state = (this.gameObj.vel.y < 0) ? "rising" : "falling";
         }
         else if (this.isRunning) {
             this.state =  "running";
