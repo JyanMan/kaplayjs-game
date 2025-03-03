@@ -51,7 +51,8 @@ export const load = {
             }
         })
         loadSprite("crystal-open", '../assets/mr-platformer/Objects/Obj-Crystal-Open-32x32.png')
-
+        loadSprite("bullet", '../assets/mr-platformer/Objects/Obj-Barrel.png')
+        
     },
     playerChicken: () => {
         loadSprite("player", '../assets/player/player-with-dodge.png', {

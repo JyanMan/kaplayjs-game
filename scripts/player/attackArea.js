@@ -25,7 +25,8 @@ class AttackArea {
                 offset: vec2(-this.radius/2, -this.radius/2) 
             }),
             scale(1),
-            pos(vec2(32, 0))
+            pos(vec2(32, 0)),
+            'attackArea'
         ])
 
         onUpdate(() => {

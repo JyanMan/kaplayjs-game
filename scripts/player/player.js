@@ -1,11 +1,12 @@
 import { vec2Product } from "../utils/vector2.js";
 import { normalizeVec } from "../utils/vector2.js";
-import AttackArea from "./attackArea.js";
 import { getCenterPos } from "../utils/vector2.js";
 import { isHit } from "../utils/healthModule.js";
+import { mousePosWithCam } from "../utils/vector2.js";
+import { playerShoot } from "./playerAttack.js";
+import AttackArea from "./attackArea.js";
 import HealthBar from "./playerHealthBar.js";
 import DodgeBar from "./playerDodgeBar.js";
-import { mousePosWithCam } from "../utils/vector2.js";
 
 class Player {
     constructor(
@@ -143,6 +144,10 @@ class Player {
     ) {
             this.startDodge();
         }
+        if (isButtonPressed("shoot")) {
+            playerShoot(getCenterPos(this), mousePosWithCam());
+        }
+
         if (isButtonDown("right") || isButtonDown("left")) {
             if (isButtonDown("right")) this.runDirection = 1;
             else if (isButtonDown("left")) this.runDirection = -1;

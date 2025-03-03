@@ -25,6 +25,9 @@ kaplay({
         },
         attack: {
             mouse: ["left"]
+        },
+        shoot: {
+            keyboard: ["shift"]
         }
     }
 });

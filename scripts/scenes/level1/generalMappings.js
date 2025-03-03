@@ -26,28 +26,21 @@ function generateMappings(tiletype) {
         ],
         2: () => [
             sprite(`${tiletype}-tileset`, {anim: "d"}),
-            area(),
             offscreen({ hide: true}),
-            z(-1),
             layer("foreground")
         ],
         3: () => [
             sprite(`${tiletype}-tileset`, {anim: "l"}),
-            area(),
             offscreen({ hide: true}),
-            z(-1),
             layer("foreground")
         ],
         4: () => [
             sprite(`${tiletype}-tileset`, {anim: "r"}),
-            area(),
             offscreen({ hide: true}),
-            z(-1),
             layer("foreground")
         ],
         "e": () => [
             sprite(`crystal-idle`, { anim: "idle" }),
-            area(),
             offscreen({ hide: true}),
             layer("object"),
         ]

@@ -11,6 +11,7 @@ export function isHit(entity, damage, attacker) {
         return;
     }
     entity.health -= damage;
+    console.log(entity.health);
 
     if (entity.healthBar) {
         entity.healthBar.updateHealthBar(entity.maxHealth, entity.health);
