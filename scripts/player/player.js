@@ -18,7 +18,7 @@ class Player {
         this.width = 10;
         this.height = 19;
         
-        this.speed = 250;
+        this.speed = 225;
         this.accel = 25;
         this.moveX = 0;
         this.isRunning = false;
@@ -43,6 +43,10 @@ class Player {
         this.attackCoolingDown = false;
         this.attackRadius = 17;
         this.attackDamage = 2;
+
+        this.shootCooldown = 1;
+        this.onShootCooldown = false;
+        this.shot = false;
 
         this.knocked = false;
         this.maxHealth = health;
@@ -144,8 +148,8 @@ class Player {
     ) {
             this.startDodge();
         }
-        if (isButtonPressed("shoot")) {
-            playerShoot(getCenterPos(this), mousePosWithCam());
+        if (isButtonPressed("shoot") && !this.onShootCooldown) {
+            this.shot = true;
         }
 
         if (isButtonDown("right") || isButtonDown("left")) {
@@ -190,6 +194,11 @@ class Player {
             return;
         }
 
+        if (this.shot) {
+            this.shot = false;
+            this.startShoot();
+        }
+
         //playerattack
         if (this.attacking) {
             this.attack();
@@ -198,7 +207,8 @@ class Player {
         
         this.moveLeftRight();
         //move player based on movex
-        this.gameObj.vel = vec2(this.moveX*dt()*40, this.gameObj.vel.y);
+        console.log(dt());
+        this.gameObj.vel = vec2(this.moveX*dt()*50, this.gameObj.vel.y*dt()*50);
         
     }
     moveLeftRight() {
@@ -247,6 +257,14 @@ class Player {
                 this.attackCoolingDown = false;
             })
         })
+    }
+
+    startShoot() {
+        this.onShootCooldown = true;
+        wait(this.shootCooldown, () => {
+            this.onShootCooldown = false;
+        })
+        playerShoot(this);
     }
 
     startDodge() {

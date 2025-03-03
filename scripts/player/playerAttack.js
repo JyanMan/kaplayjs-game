@@ -1,11 +1,15 @@
-import { normalizeVec, vec2Product } from "../utils/vector2.js";
+import { getCenterPos, mousePosWithCam, normalizeVec, vec2Product } from "../utils/vector2.js";
 
-export function playerShoot(playerPos, targetPos) {
-    const direction = normalizeVec(targetPos.sub(playerPos));
+export function playerShoot(player) {
+
+    const playerPos = getCenterPos(player);
+    const direction = normalizeVec(mousePosWithCam().sub(playerPos));
+
     const width = 5;
     const speed = 1000;
     const maxReach = 300;
     const damage = 1;
+    const knockStrength = 50;
     let isDestroyed = false;
     let alreadyHit = false;
     
@@ -13,19 +17,22 @@ export function playerShoot(playerPos, targetPos) {
     const bullet = add([
         sprite("bullet"),
         pos(playerPos),
-        area({
-            shape: new Rect(vec2(0,0), width, width),
-            collisionIgnore: ['player', 'attackArea']
-        }),
         anchor(vec2(0, 0.5)),
         scale(4),
         layer("object"),
         "bullet",
         offscreen({ hide: true }),
+        area({
+            shape: new Rect(vec2(0,0), width, width),
+            collisionIgnore: ['player', 'attackArea']
+        }),
         {
-            knockStrength: 10,
+            knockStrength: knockStrength,
         }
     ])
+    //player bounce
+    playerBounce(player);
+
     //destroy it after some time
     wait(maxReach/speed, () => {
         if (!isDestroyed) {
@@ -48,4 +55,13 @@ export function playerShoot(playerPos, targetPos) {
         //destroy object if collided
         destroy(bullet);
     })
+}
+
+function playerBounce(player) {
+    const force = 400;
+    const direction = normalizeVec(getCenterPos(player).sub(mousePosWithCam()));
+    
+    //player.moveX = 0;
+    player.moveX = direction.x*force;
+    player.gameObj.vel = vec2Product(direction, force);
 }

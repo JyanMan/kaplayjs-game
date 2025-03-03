@@ -17,15 +17,11 @@ export class Level {
         }
         //console.log(levelLayout);
         this.layers = []
-        for (const layer of levelLayout) {
-            this.layers.push(addLevel(layer, layerSettings))
+        for (const layerLayout of levelLayout) {
+            this.layers.push(addLevel(layerLayout, layerSettings))
         }
-        console.log(this.layers);
         for (const layer of this.layers) {
             layer.use(scale(4));
         }
-
-        // const layer = addLevel(levelLayout, layerSettings)
-        // layer.use(scale(4));
     }
 }
