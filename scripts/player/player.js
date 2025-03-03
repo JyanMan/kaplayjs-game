@@ -3,7 +3,7 @@ import { normalizeVec } from "../utils/vector2.js";
 import { getCenterPos } from "../utils/vector2.js";
 import { isHit } from "../utils/healthModule.js";
 import { mousePosWithCam } from "../utils/vector2.js";
-import { playerShoot } from "./playerAttack.js";
+import { playerShoot, playerSword } from "./playerAttack.js";
 import AttackArea from "./attackArea.js";
 import HealthBar from "./playerHealthBar.js";
 import DodgeBar from "./playerDodgeBar.js";
@@ -201,7 +201,7 @@ class Player {
 
         //playerattack
         if (this.attacking) {
-            this.attack();
+            playerSword(this);
             return;
         }
         
@@ -237,17 +237,6 @@ class Player {
         }
     }
     
-    attack() {
-        this.moveX = 0;
-        
-        const selfCenter = getCenterPos(this);
-        const mouseDir = normalizeVec(mousePosWithCam().sub(selfCenter)); //Math.sign(mousePosWithCam().x - selfCenter.x);
-        
-        const targets = get("zombie");
-        this.attackArea.attack(mouseDir, targets);
-
-        this.gameObj.vel = vec2(Math.sign(mouseDir.x)*100, 0);
-    }
     setAttackCooldown() {
         this.attackCoolingDown = true;
         this.attacking = true;
