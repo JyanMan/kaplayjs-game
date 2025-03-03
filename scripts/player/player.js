@@ -353,6 +353,7 @@ class Player {
                 this.faceMouse = false;
                 const mouseDirX = Math.sign(mousePosWithCam().x - getCenterPos(this).x);
                 this.faceRight = (mouseDirX === 1) ? true : false;
+                this.runDirection = mouseDirX;
             }
             return;
         }

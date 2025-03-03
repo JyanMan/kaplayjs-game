@@ -3,6 +3,7 @@ import kaplay from "./lib/kaplay.mjs";
 import { load } from "./scripts/utils/loader.js";
 import { levelOne } from "./scripts/scenes/level1/level1.js";
 import { uiManager } from "./scripts/utils/UIManager.js";
+import { levelTwo } from "./scripts/scenes/level2/level2.js";
 
 kaplay({
     width: 1280,
@@ -43,11 +44,14 @@ const scenes = {
     menu: () => {
         uiManager.displayMainMenu();
     },
+    levelsMenu: () => {
+        uiManager.displayLevels(2);
+    },
     level1: () => {
         levelOne();
     },
     level2: () => {
-
+        levelTwo();
     }
 }
 
