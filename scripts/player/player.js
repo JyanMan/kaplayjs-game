@@ -38,6 +38,8 @@ class Player {
 
         this.attacking = false;
         this.attackDuration = 0.3;
+        this.attackCooldown = 0.3;
+        this.attackCoolingDown = false;
         this.attackRadius = 17;
         this.attackDamage = 2;
 
@@ -68,6 +70,7 @@ class Player {
             body(),
             color(WHITE),
             "player",
+            layer("object"),
             {
                 //public properties
                 attackDamage: this.attackDamage,
@@ -151,12 +154,8 @@ class Player {
         if (!this.gameObj.isGrounded()) {
             return;
         }
-        if (isButtonPressed("attack") && !this.attacking) {
-            //console.log("attacked");
-            this.attacking = true;
-            wait(this.attackDuration, () => {
-                this.attacking = false;
-            })
+        if (isButtonPressed("attack") && !this.attacking && !this.attackCoolingDown) {
+            this.setAttackCooldown();
         }
         if (isButtonDown("jump")) {
             this.jumped = true;
@@ -236,6 +235,16 @@ class Player {
         const targets = get("zombie");
         this.attackArea.attack(mouseDirX, targets);
         //console.log("attacking");
+    }
+    setAttackCooldown() {
+        this.attackCoolingDown = true;
+        this.attacking = true;
+        wait(this.attackDuration, () => {
+            this.attacking = false;
+            wait(this.attackCooldown, () => {
+                this.attackCoolingDown = false;
+            })
+        })
     }
 
     startDodge() {

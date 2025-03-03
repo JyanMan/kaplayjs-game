@@ -4,7 +4,7 @@ export class Level {
             sprite("background"),
             scale(scaleValue),
             fixed(),
-            z(-1)
+            layer("background")
         ])
     }
 
@@ -13,7 +13,7 @@ export class Level {
         const layerSettings = {
             tileWidth: 24,
             tileHeight: 24,
-            tiles: mappings
+            tiles: mappings,
         }
         //console.log(levelLayout);
 

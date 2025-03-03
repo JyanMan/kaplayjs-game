@@ -46,8 +46,10 @@ class AttackArea {
                 objVertices[2],
                 objVertices[3],
             ],
+            z: 10,
             pos: vec2(0, 0),
-            color: this.colliderColor
+            color: this.colliderColor,
+            layer: "ui"
         })
     }
 
