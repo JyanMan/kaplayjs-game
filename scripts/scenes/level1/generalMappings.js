@@ -44,6 +44,12 @@ function generateMappings(tiletype) {
             offscreen({ hide: true}),
             z(-1),
             layer("foreground")
+        ],
+        "e": () => [
+            sprite(`crystal-idle`, { anim: "idle" }),
+            area(),
+            offscreen({ hide: true}),
+            layer("object"),
         ]
     }
 }

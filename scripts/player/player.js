@@ -111,6 +111,7 @@ class Player {
         onFixedUpdate(() => {
             //this.playerMove();
             this.action();
+            this.finishLevel();
         });
     }
 
@@ -351,6 +352,16 @@ class Player {
         }
         
         this.faceRight = (this.runDirection === 1) ? true : false;
+    }
+    
+    finishLevel() {
+        const endCrystal = get("endCrystal")[0];
+        if (!endCrystal) {
+            return;
+        }
+        if (this.gameObj.isColliding(endCrystal)) {
+            console.log("level is finished");
+        }
     }
 }
 

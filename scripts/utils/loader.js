@@ -29,15 +29,6 @@ export const load = {
             }
         });
         loadSprite("dodgy", '../assets/player/dodge-bar.png')
-        //loadSprite("dodgy2", '../assets/player/dodge-bar.png')
-        // loadSprite("block-tileset", '../assets/block-tileset.png', {
-        //     sliceX: 4,
-        //     sliceY: 4,
-        //     anims: {
-        //         tl: 0,
-        //         tm: 1,
-        //     }
-        // });
         loadSprite("mr-tileset", '../assets/mr-platformer/Tiles/combined-tilesheet.png', {
             sliceX: 39,
             sliceY: 1,
@@ -50,6 +41,15 @@ export const load = {
                 r: 4,
             }
         });
+        loadSprite("crystal-idle", '../assets/mr-platformer/Objects/Obj-Crystal-Idle-32x32.png', {
+            sliceX: 2,
+            sliceY: 3,
+            anims: {
+                idle: {from: 0, to: 4, loop: true}
+            }
+        })
+        loadSprite("crystal-open", '../assets/mr-platformer/Objects/Obj-Crystal-Open-32x32.png')
+
     },
     playerChicken: () => {
         loadSprite("player", '../assets/player/player-with-dodge.png', {

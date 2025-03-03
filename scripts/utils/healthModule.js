@@ -24,6 +24,7 @@ export function isHit(entity, damage, attacker) {
     }
     
     if (entity.health <= 0) {
+        //entity.gameObj.color = PINK;
         for (const child of entity.gameObj.children) {
             entity.gameObj.destroy(child);
         }
@@ -40,6 +41,6 @@ function setKnockTimer(entity) { //MAKE ONE FUNCTION SETTIMER NEXT TIME
 }
     
 function knockback(entity, attacker) {
-    const knockDirection = normalizeVec(entity.gameObj.pos.sub(attacker.pos));
+    const knockDirection = normalizeVec(entity.gameObj.pos.sub(attacker.pos).add(vec2(0, -50)));
     entity.gameObj.vel = vec2Product(knockDirection, attacker.knockStrength*2);
 }
