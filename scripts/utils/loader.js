@@ -13,10 +13,6 @@ export const load = {
                 attack: { from: 16, to: 19, loop: false, speed: 15 }
             }
         });
-        loadSprite("healthbar", '../assets/player/hp-bar.png', {
-            sliceX: 1,
-            sliceY: 2,
-        })
         loadSprite("zombie", '../assets/zombie.png', {
             sliceX: 4,
             sliceY: 4,
@@ -28,7 +24,13 @@ export const load = {
                 fall: 9
             }
         });
+        
         loadSprite("dodgy", '../assets/player/dodge-bar.png')
+        loadSprite("healthbar", '../assets/player/hp-bar.png', {
+            sliceX: 1,
+            sliceY: 2,
+        })
+
         loadSprite("mr-tileset", '../assets/mr-platformer/Tiles/combined-tilesheet.png', {
             sliceX: 39,
             sliceY: 1,

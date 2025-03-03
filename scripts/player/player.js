@@ -212,8 +212,6 @@ class Player {
         }
         else {
             if (this.gameObj.isGrounded()) {
-                //slowly decreases movement instead of just 
-                //setting to zero
                 if (Math.abs(this.moveX) >= accel) {
                     this.moveX -= Math.sign(this.moveX)*Math.abs(accel);
                 }
@@ -230,12 +228,9 @@ class Player {
 
         const selfCenter = getCenterPos(this);
         const mouseDirX = normalizeVec(mousePosWithCam().sub(selfCenter)); //Math.sign(mousePosWithCam().x - selfCenter.x);
-        //const mouseDirX = Math.sign(mouseDirection(this).x);
-        //console.log(mousePosWithCam().x - selfCenter.x);
-        //console.log(mouseDirX, selfCenter);
+        
         const targets = get("zombie");
         this.attackArea.attack(mouseDirX, targets);
-        //console.log("attacking");
     }
     setAttackCooldown() {
         this.attackCoolingDown = true;
@@ -292,13 +287,10 @@ class Player {
             mouseDelta = vec2Product(mouseDir, this.dodgeRadius*dt()*50)
         }
 
-        //move player to mouse position
         this.moveX = 0;
         this.gameObj.vel = vec2(0, 0);
         this.gameObj.vel = vec2Product(mouseDelta, 8);
 
-        //for debugging purposes
-        //console.log(getCamPos().sub(vec2(width()/2, height()/2)));
         drawCircle({
             pos: mouseDelta.add(selfCenter),
             radius: 20,

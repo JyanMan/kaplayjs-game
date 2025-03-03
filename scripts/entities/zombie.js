@@ -125,11 +125,10 @@ class Zombie {
     }
     
     followPlayer() {
-        //console.log(this.gameObj);
         const player = get("player")[0];
-        //console.log(withinRadius(this.gameObj, player, this.followRange));
         this.gameObj.vel = vec2(this.moveX, this.gameObj.vel.y);
 
+        //if not within radius or player does not exist
         if (!player || !withinRadius(this.gameObj, player, this.followRange)) {
             this.isWalking = false;
             this.moveX = 0;
@@ -139,25 +138,12 @@ class Zombie {
         const distanceToPlayer = player.pos.sub(this.gameObj.pos);
         
         if (distanceToPlayer.len() <= this.attackRadius) {
-            //this.isWalking = false;
             this.attack();
-            // if (Math.abs(distanceToPlayer.y) <= this.attackRadius) {
-
-            //     this.attack();
-            // }
-            // if (Math.abs(this.moveX) > this.accel) {
-            //     this.moveX -= this.accel*Math.sign(this.moveX);
-            // }
-            // else {
-            //     this.moveX = 0;
-            // }
-            // return;
         }
 
-        this.onJumpLogic(distanceToPlayer);
+        this.onJumpLogic(distanceToPlayer.y);
 
         this.isWalking = true;
-        //console.log(distanceToPlayer);
 
         //move to player
         this.moveX +=Math.sign(distanceToPlayer.x)*this.accel;
@@ -166,34 +152,23 @@ class Zombie {
         }
     }
 
-    onJumpLogic(distance) {
-        const distanceY = distance.y; 
-        // if (!this.gameObj.isGrounded()) {
-        //     return;
-        // }
-        if (this.onJumpCooldown) {
+    onJumpLogic(distanceY) {
+        if (this.onJumpCooldown || distanceY >= 0) {
             return;
         }
         this.onJumpCooldown = true;
-        this.setJumpOnDelay(distanceY);
-        // if (distanceY < 0) {
-        //     //console.log(distanceY);
-        //     this.onJumpCooldown = true;
-        //     this.gameObj.jump();
-        //     this.setJumpCooldown();
-        // }
+        this.setJumpOnDelay();
     }
 
-    setJumpOnDelay(distanceY) {
-        wait(this.jumpCooldown/2, () => {
+    setJumpOnDelay() {
+        wait(this.jumpCooldown*0.2, () => {
             
             if (!this.gameObj.isGrounded()) {
+                this.onJumpCooldown = false;
                 return;
             }
-            if (distanceY < 0) {
-                this.gameObj.jump();
-            }
-            wait(this.jumpCooldown/2, () => {
+            this.gameObj.jump();
+            wait(this.jumpCooldown*0.8, () => {
                 this.onJumpCooldown = false;
             })
         })
@@ -242,11 +217,6 @@ class Zombie {
     }
 
     attack() {
-        // const distToPlayer = player.pos.sub(this.gameObj.pos);
-        // //console.log(distToPlayer);
-        // if (Math.abs(distToPlayer.x) <= this.attackRadius) {
-        //     console.log("within range");
-        // }
         if (!this.gameObj.isGrounded()) {
             return;
         }

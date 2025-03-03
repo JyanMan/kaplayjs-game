@@ -24,7 +24,6 @@ export function isHit(entity, damage, attacker) {
     }
     
     if (entity.health <= 0) {
-        //entity.gameObj.color = PINK;
         for (const child of entity.gameObj.children) {
             entity.gameObj.destroy(child);
         }

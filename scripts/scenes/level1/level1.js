@@ -7,8 +7,6 @@ import { generateLevel1Entities } from "./level1Entities.js";
 
 export const levelOne = () => {
 
-    
-    //const zombie2 = new Zombie(60, 40, 10);
     const player = new Player(200, 0, 20)
     
     function start() {
@@ -22,8 +20,6 @@ export const levelOne = () => {
     }
     
     onUpdate(() => {
-        //console.log(player.gameObj.pos);
-        //setCamPos(player.gameObj.pos);
         cameraAttach(player);
     });
     

@@ -25,7 +25,6 @@ class HealthBar {
     updateHealthBar(maxHealth, currentHealth) {
         if (currentHealth <= 0) {
             this.currentHealthObj.width = 0.1;
-            //this.currentHealthObj.hide = true;
             return;
         }
 
