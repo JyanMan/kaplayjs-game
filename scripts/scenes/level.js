@@ -7,7 +7,7 @@ export class Level {
             sprite("background"),
             scale(scaleValue),
             fixed(),
-            layer("background")
+            layer("background"),
         ])
     }
 

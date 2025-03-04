@@ -1,3 +1,5 @@
+import Bat from "../entities/bat.js";
+
 export const levelMappings = generateMappings('mr');
 
 function generateMappings(tiletype) {
@@ -36,6 +38,20 @@ function generateMappings(tiletype) {
         ],
         4: () => [
             sprite(`${tiletype}-tileset`, {anim: "r"}),
+            offscreen({ hide: true}),
+            layer("foreground")
+        ],
+        5: () => [
+            sprite(`${tiletype}-tileset`, {anim: "l"}),
+            area(),
+            body({ isStatic: true }),
+            offscreen({ hide: true}),
+            layer("foreground")
+        ],
+        6: () => [
+            sprite(`${tiletype}-tileset`, {anim: "r"}),
+            area(),
+            body({ isStatic: true }),
             offscreen({ hide: true}),
             layer("foreground")
         ],

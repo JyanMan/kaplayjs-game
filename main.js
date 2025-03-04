@@ -33,7 +33,6 @@ kaplay({
     }
 });
 
-
 setLayers(
     ["foreground", "background", "object", "ui"],
     "object"
@@ -41,8 +40,13 @@ setLayers(
 
 
 load.assets();
+const storedCompletedLevels = JSON.parse(sessionStorage.getItem("completedLevels"));
 
-const completedLevels = new Set([0]);
+const completedLevels = (!storedCompletedLevels) ?
+    new Set([0]) :
+    new Set([...storedCompletedLevels]);
+
+// const completedLevels = new Set([0]);
 sessionStorage.setItem("completedLevels", JSON.stringify([...completedLevels]));
 
 const scenes = {

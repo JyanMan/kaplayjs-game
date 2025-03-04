@@ -24,6 +24,13 @@ export const load = {
                 fall: 9
             }
         });
+        loadSprite('enemy-bat', '../assets/mr-platformer/Enemies/Enemy-Bat-Fly-32x32.png', {
+            sliceX: 2,
+            sliceY: 6,
+            anims: {
+                fly: { from: 0, to: 4, loop: true }
+            }
+        })
         
         loadSprite("dodgy", '../assets/player/dodge-bar.png')
         loadSprite("healthbar", '../assets/player/hp-bar.png', {

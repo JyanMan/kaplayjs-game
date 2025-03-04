@@ -1,7 +1,7 @@
 import Player from "../../player/player.js"
 import { cameraAttach } from "../../utils/camera.js";
 import { Level } from "../level.js";
-import { levelMappings } from "./generalMappings.js";
+import { levelMappings } from "../generalMappings.js";
 import { level1Layout } from "./levelLayout.js";
 import { generateLevel1Entities } from "./level1Entities.js";
 
@@ -15,26 +15,9 @@ export const levelOne = () => {
         level.drawMapLayout(level1Layout, levelMappings);
         player.makePlayer();
         generateLevel1Entities();
+
         level.onCheckLevelFinished(player);
-        // player.gameObj.onCollide((obj) => {
-        //     if (isLevelFinished(obj)) {
-        //         levelFinished(level.value);
-        //     }
-        // })
     }
-
-    // function isLevelFinished(obj) {
-    //     return (
-    //         obj.tags.includes('end-crystal') &&
-    //         get("enemy").length <= 0
-    //     )
-    // }
-
-    // function levelFinished(level) {
-    //     const storedCompletedLevels = JSON.parse(sessionStorage.getItem("completedLevels"));
-    //     storedCompletedLevels.add(level);
-    //     go("menu");
-    // }
     
     onUpdate(() => {
         cameraAttach(player);
