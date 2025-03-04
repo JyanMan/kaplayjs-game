@@ -6,7 +6,7 @@ import { level1Layout } from "./levelLayout.js";
 import { generateLevel1Entities } from "./level1Entities.js";
 
 export const levelOne = () => {
-
+    console.log("called agian");
     const player = new Player(200, 0, 20)
     
     function start() {
@@ -17,6 +17,8 @@ export const levelOne = () => {
         player.makePlayer();
         generateLevel1Entities();
         
+        const completedLevels = JSON.parse(sessionStorage.getItem("completedLevels"));
+        console.log(completedLevels);
     }
     
     onUpdate(() => {

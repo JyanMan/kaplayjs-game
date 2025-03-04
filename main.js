@@ -38,7 +38,12 @@ setLayers(
     ["foreground", "background", "object", "ui"],
     "object"
 )
+
+
 load.assets();
+
+const completedLevels = new Set([1, 2, 3]);
+sessionStorage.setItem("completedLevels", JSON.stringify([...completedLevels]));
 
 const scenes = {
     menu: () => {

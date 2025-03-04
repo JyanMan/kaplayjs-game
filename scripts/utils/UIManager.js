@@ -34,10 +34,11 @@ class UIManager {
                     go: () => go(`level${i}`)
                 }
             ])
-            onClick(`level`, (obj) => {
-                obj.go();
-            })
         }
+
+        onClick(`level`, (obj) => {
+            obj.go();
+        })
     }
 }
 
