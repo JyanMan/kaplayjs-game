@@ -22,15 +22,16 @@ class AttackArea {
                     this.radius,
                     this.radius
                 ),
-                offset: vec2(-this.radius/2, -this.radius/2) 
+                //offset: vec2(-this.radius/2, -this.radius/2) 
             }),
             scale(1),
-            pos(vec2(32, 0)),
+            anchor('center'),
+            pos(vec2(0, 0)),
             'attackArea'
         ])
 
         onUpdate(() => {
-            //this.draw();
+            this.draw();
            // console.log(this.attacker.attackRadius);
         }) 
     }
@@ -62,13 +63,16 @@ class AttackArea {
         this.attacking = true;
         this.setTimer(this.attacker.attackDuration);
         this.colliderColor = GREEN;
+        console.log(direction);
+
         this.gameObj.pos = vec2Product(direction, this.radius/2) //vec2(this.radius*direction/2, 0)
-        .add(
-            vec2(
-                this.attacker.width/2,
-                this.attacker.height/2
-            )
-        )
+        // this.gameObj.pos = vec2Product(direction, this.radius/2) //vec2(this.radius*direction/2, 0)
+        // .add(
+        //     vec2(
+        //         this.attacker.width/2,
+        //         this.attacker.height/2
+        //     )
+        // )
         //SOMETHING TO FIX
     }
     

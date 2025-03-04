@@ -2,7 +2,7 @@ import { getCenterPos, mousePosWithCam, normalizeVec, vec2Product } from "../uti
 
 export function playerShoot(player) {
 
-    const playerPos = getCenterPos(player);
+    const playerPos = player.gameObj.pos;
     const direction = normalizeVec(mousePosWithCam().sub(playerPos));
 
     const width = 5;
@@ -70,9 +70,9 @@ export function playerSword(player) {
     player.moveX = 0;
         
     const selfCenter = getCenterPos(player);
-    const mouseDir = normalizeVec(mousePosWithCam().sub(selfCenter)); //Math.sign(mousePosWithCam().x - selfCenter.x);
+    const mouseDir = normalizeVec(mousePosWithCam().sub(player.gameObj.pos)); //Math.sign(mousePosWithCam().x - selfCenter.x);
         
-    const targets = get("zombie");
+    const targets = get("enemy");
     player.attackArea.attack(mouseDir, targets);
 
     player.gameObj.vel = vec2(Math.sign(mouseDir.x)*50, 0);

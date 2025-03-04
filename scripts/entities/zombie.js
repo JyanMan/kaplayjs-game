@@ -49,9 +49,10 @@ class Zombie {
             sprite("zombie", {anim: "idle"}),
             scale(4),
             pos(this.pos),
+            anchor('center'),
             area({
-                shape: new Rect(vec2(this.width/2, this.height/2), this.width, this.height),
-                offset: vec2(6, -10),
+                shape: new Rect(vec2(0,0), this.width, this.height),
+                offset: vec2(0, 2),
                 collisionIgnore: ["player", "zombie"]
             }),
             body(),
@@ -81,7 +82,7 @@ class Zombie {
         onUpdate(() => {
             if (this.objDestroyed) return;
             this.animation();
-            //this.draw();
+            this.draw();
         }) 
         onFixedUpdate(() => {
             if (this.objDestroyed) return;
@@ -91,17 +92,34 @@ class Zombie {
     }
 
     draw() {
+        if (!this.gameObj) {
+            return;
+        }
         const obj = this.gameObj;
-        drawRect({
-            width: this.width*obj.scale.x,
-            height: this.height*obj.scale.y,
-            pos: this.gameObj.pos.add(
-                (this.width/2 + obj.area.offset.x)*obj.scale.x,
-                (this.height/2+obj.area.offset.y)*obj.scale.y
-            ),
+        const objVertices = obj.worldArea().pts
+        drawPolygon({
+            pts: [
+                objVertices[0],
+                objVertices[1],
+                objVertices[2],
+                objVertices[3],
+            ],
+            z: 10,
+            pos: vec2(0, 0),
             color: YELLOW,
-            fill: true
+            layer: "ui"
         })
+        // const obj = this.gameObj;
+        // drawRect({
+        //     width: this.width*obj.scale.x,
+        //     height: this.height*obj.scale.y,
+        //     pos: this.gameObj.pos.add(
+        //         (this.width/2 + obj.area.offset.x)*obj.scale.x,
+        //         (this.height/2+obj.area.offset.y)*obj.scale.y
+        //     ),
+        //     color: YELLOW,
+        //     fill: true
+        // })
     }
 
     move() {

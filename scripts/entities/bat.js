@@ -1,4 +1,5 @@
 import { withinRadius } from '../utils/enemyLogic.js';
+import { isHit } from '../utils/healthModule.js';
 
 class Bat {
     constructor(x, y, health) {
@@ -15,7 +16,11 @@ class Bat {
         this.onBounceFly = false;
         this.onBounceFlyCd = 0.2;
         
-        this.jumpForce = 500;
+        this.jumpForce = 300;
+
+        this.attackDamage = 2;
+        this.attackCooldown = 0.2;
+        this.onAttackCooldown = false;
 
         this.health = health
     }
@@ -25,10 +30,11 @@ class Bat {
             sprite("enemy-bat", {anim: "fly"}),
             scale(4),
             pos(this.pos),
-            area({
-                collisionIgnore: ['player', 'enemy']
-            }),
             anchor('center'),
+            area({
+                shape: new Rect(vec2(0,0), 10, 10),
+                collisionIgnore: ['enemy']
+            }),
             body(),
             color(WHITE),
             'bat', 'enemy',
@@ -36,16 +42,50 @@ class Bat {
                 // attackDamage: this.attackDamage,
                 // attackRadius: this.attackRadius*0.25,
                 // attackDuration: this.attackDuration,
-                knockStrength: 150,
+                knockStrength: 100,
+                attackDuration: this.attackCooldown,
                 isHit: (entity, damage, attacker) => isHit(this, damage, attacker)
             },
             offscreen({ hide: true }),
         ]);
         
         onUpdate(() => {
-            this.followPlayer();
+            this.draw();
             //console.log(this.gameObj.pos);
         })
+        onFixedUpdate(() => {
+            this.followPlayer();
+        })
+    }
+    draw() {
+        if (!this.gameObj) {
+            return;
+        }
+        const obj = this.gameObj;
+        const objVertices = obj.worldArea().pts
+        drawPolygon({
+            pts: [
+                objVertices[0],
+                objVertices[1],
+                objVertices[2],
+                objVertices[3],
+            ],
+            z: 10,
+            pos: vec2(0, 0),
+            color: YELLOW,
+            layer: "ui"
+        })
+        // const obj = this.gameObj;
+        // drawRect({
+        //     width: this.width*obj.scale.x,
+        //     height: this.height*obj.scale.y,
+        //     pos: this.gameObj.pos.add(
+        //         (this.width/2 + obj.area.offset.x)*obj.scale.x,
+        //         (this.height/2+obj.area.offset.y)*obj.scale.y
+        //     ),
+        //     color: YELLOW,
+        //     fill: true
+        // })
     }
 
     followPlayer() {
@@ -58,13 +98,17 @@ class Bat {
             this.moveX = 0;
             return;
         }
-
         //attack on collide
-        const distanceToPlayer = player.pos.sub(this.gameObj.pos);
-        // if (distanceToPlayer.len() <= this.attackRadius) {
-        //     this.attack();
-        // }
+        if (this.gameObj.isColliding(player)) {
+            //console.log("00000");
+            this.attack(player);
+        }
 
+        // if (distanceToPlayer.len() <= this.attackRadius) {
+            //     this.attack();
+            // }
+            
+        const distanceToPlayer = player.pos.sub(this.gameObj.pos);
         this.onFlyLogic(distanceToPlayer.y);
 
         this.moving = true;
@@ -80,7 +124,6 @@ class Bat {
         if (this.onBounceFly) {
             return;
         }
-        console.log("aboved");
         this.setBounceCooldown();
         if (distanceY < 0) {
             this.gameObj.jump(this.jumpForce);
@@ -90,6 +133,18 @@ class Bat {
         this.onBounceFly = true;
         wait(this.onBounceFlyCd, () => {
             this.onBounceFly = false;
+        })
+    }
+
+    attack(player) {
+        if (this.onAttackCooldown) {
+            return;
+        }
+        console.log('asdf');
+        this.onAttackCooldown = true;
+        player.isHit(0, this.attackDamage, this.gameObj);
+        wait(this.attackCooldown, () => {
+            this.onAttackCooldown = false;
         })
     }
 }

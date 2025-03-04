@@ -68,10 +68,11 @@ class Player {
             //FIX THIS AREA, ITS NOT PROPERLY OFFSET
             //COULD FIX SPRITESHEET INSTEAD
             area({ 
-                shape: new Rect(vec2(this.width/2, this.height/2), this.width, this.height),
-                offset: vec2(6, 3.5),
-                collisionIgnore: ["player", "zombie"]
+                shape: new Rect(vec2(0,0), this.width, this.height),
+                offset: vec2(0, 6),
+                collisionIgnore: ["player", "enemy"]
             }),
+            anchor('center'),
             body(),
             color(WHITE),
             "player",
@@ -116,7 +117,7 @@ class Player {
 
             //console.log(this.dodgeAmount, this.dodgeAmountMax);
             //for debuggin collider
-            //this.draw();
+            this.draw();
             //console.log(this.gameObj.tag);
         });
         onFixedUpdate(() => {
@@ -126,16 +127,34 @@ class Player {
     }
 
     draw() {
+        // const obj = this.gameObj;
+        // drawRect({
+        //     width: this.width*obj.scale.x,
+        //     height: this.height*obj.scale.y,
+        //     pos: obj.pos.sub(vec2(0, 6*4)),
+        //     // pos: this.gameObj.pos.add(
+        //     //     (this.width/2 + obj.area.offset.x)*obj.scale.x,
+        //     //     (this.height/2+obj.area.offset.y)*obj.scale.y
+        //     // ),
+        //     color: YELLOW,
+        //     fill: true
+        // })
+        if (!this.gameObj) {
+            return;
+        }
         const obj = this.gameObj;
-        drawRect({
-            width: this.width*obj.scale.x,
-            height: this.height*obj.scale.y,
-            pos: this.gameObj.pos.add(
-                (this.width/2 + obj.area.offset.x)*obj.scale.x,
-                (this.height/2+obj.area.offset.y)*obj.scale.y
-            ),
+        const objVertices = obj.worldArea().pts
+        drawPolygon({
+            pts: [
+                objVertices[0],
+                objVertices[1],
+                objVertices[2],
+                objVertices[3],
+            ],
+            z: 10,
+            pos: vec2(0, 0),
             color: YELLOW,
-            fill: true
+            layer: "ui"
         })
 
         //draw the center
@@ -291,8 +310,7 @@ class Player {
     playerDodge() {
         //get mouse position from player
         //get mouse direction
-        const selfCenter = getCenterPos(this);
-        let mouseDelta = mousePosWithCam().sub(selfCenter); //mousePos SUBTRACT selfCenter
+        let mouseDelta = mousePosWithCam().sub(this.gameObj.pos); //mousePos SUBTRACT selfCenter
         const mouseDeltaLen = mouseDelta.len();
         const mouseDir = normalizeVec(mouseDelta, mouseDeltaLen);
 
@@ -309,7 +327,7 @@ class Player {
         this.gameObj.vel = vec2Product(mouseDelta, 8);
 
         drawCircle({
-            pos: mouseDelta.add(selfCenter),
+            pos: mouseDelta.add(this.gameObj.pos),
             radius: 20,
             color: BLACK
         });
