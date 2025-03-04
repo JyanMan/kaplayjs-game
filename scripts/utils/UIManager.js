@@ -31,12 +31,20 @@ class UIManager {
                 area(),
                 `level`,
                 {
-                    go: () => go(`level${i}`)
+                    go: () => go(`level${i}`),
+                    value: i
                 }
             ])
         }
 
+        const storedCompletedLevels = JSON.parse(sessionStorage.getItem("completedLevels"));
+        const completedLevels = new Set([...storedCompletedLevels]);
+
         onClick(`level`, (obj) => {
+            if (!completedLevels.has(obj.value-1)) {
+                console.log("complete previous level/s");
+                return;
+            }
             obj.go();
         })
     }

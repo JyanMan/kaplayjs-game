@@ -1,4 +1,7 @@
 export class Level {
+    constructor(level) {
+        this.level = level;
+    }
     drawBackground(scaleValue) {
         add([
             sprite("background"),
@@ -24,4 +27,29 @@ export class Level {
             layer.use(scale(4));
         }
     }
+
+    onCheckLevelFinished(player) {
+        player.gameObj.onCollide((obj) => {
+            if (isLevelFinished(obj)) {
+                levelFinished(this.level);
+            }
+        })
+    }
+}
+
+function isLevelFinished(obj) {
+    return (
+        obj.tags.includes('end-crystal') &&
+        get("enemy").length <= 0
+    )
+}
+
+function levelFinished(level) {
+    const storedCompletedLevels = JSON.parse(sessionStorage.getItem("completedLevels"));
+    const completedLevels = new Set([...storedCompletedLevels]);
+    completedLevels.add(level);
+    //console.log(completedLevels);
+
+    sessionStorage.setItem("completedLevels", JSON.stringify([...completedLevels]));
+    go("menu");
 }

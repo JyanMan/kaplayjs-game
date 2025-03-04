@@ -6,20 +6,35 @@ import { level1Layout } from "./levelLayout.js";
 import { generateLevel1Entities } from "./level1Entities.js";
 
 export const levelOne = () => {
-    console.log("called agian");
-    const player = new Player(200, 0, 20)
+    const player = new Player(200, 0, 20);
     
     function start() {
         
-        const level = new Level();
+        const level = new Level(1);
         level.drawBackground(4);
         level.drawMapLayout(level1Layout, levelMappings);
         player.makePlayer();
         generateLevel1Entities();
-        
-        const completedLevels = JSON.parse(sessionStorage.getItem("completedLevels"));
-        console.log(completedLevels);
+        level.onCheckLevelFinished(player);
+        // player.gameObj.onCollide((obj) => {
+        //     if (isLevelFinished(obj)) {
+        //         levelFinished(level.value);
+        //     }
+        // })
     }
+
+    // function isLevelFinished(obj) {
+    //     return (
+    //         obj.tags.includes('end-crystal') &&
+    //         get("enemy").length <= 0
+    //     )
+    // }
+
+    // function levelFinished(level) {
+    //     const storedCompletedLevels = JSON.parse(sessionStorage.getItem("completedLevels"));
+    //     storedCompletedLevels.add(level);
+    //     go("menu");
+    // }
     
     onUpdate(() => {
         cameraAttach(player);

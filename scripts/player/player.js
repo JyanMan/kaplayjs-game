@@ -98,11 +98,11 @@ class Player {
             this.dodgeBar = new DodgeBar(this);
             this.dodgeBar.initialize();
 
-            this.gameObj.onCollide((obj) => {
-                if (obj.tags.includes('end-crystal')) {
-                    this.finishLevel();
-                }
-            })
+            // this.gameObj.onCollide((obj) => {
+            //     if (obj.tags.includes('end-crystal')) {
+            //         this.finishLevel();
+            //     }
+            // })
         }
         start();
         

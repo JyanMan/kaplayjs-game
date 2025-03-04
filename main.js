@@ -42,7 +42,7 @@ setLayers(
 
 load.assets();
 
-const completedLevels = new Set([1, 2, 3]);
+const completedLevels = new Set([0]);
 sessionStorage.setItem("completedLevels", JSON.stringify([...completedLevels]));
 
 const scenes = {
