@@ -39,6 +39,9 @@ export function playerShoot(player) {
     ])
     //player bounce
     playerBounce(player);
+    const gun = player.gameObj.get('owned-gun')[0];
+    gun.shootAnim();
+    gun.faceDirection(direction);
 
     //destroy it after some time
     wait(maxReach/speed, () => {
