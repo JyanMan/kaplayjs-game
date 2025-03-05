@@ -61,6 +61,9 @@ const scenes = {
     },
     level2: () => {
         levelTwo();
+    },
+    defeat: () => {
+        uiManager.displayDefeated();
     }
 }
 

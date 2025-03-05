@@ -48,6 +48,31 @@ class UIManager {
             obj.go();
         })
     }
+
+    displayDefeated() {
+        add([
+            sprite("background"),
+            scale(4)
+        ])
+        const defeatText = add([
+            text('YOU DAMN LOST MAN'),
+            scale(3),
+            pos(vec2(width()/2, 200)),
+            anchor('center'),
+        ])
+        const retryText = add([
+            text('Retry????'),
+            scale(2),
+            pos(vec2(width()/2, 500)),
+            anchor('center'),
+            area(),
+            'retry-btn'
+        ])
+
+        onClick('retry-btn', () => {
+            go('menu');
+        })
+    }
 }
 
 export const uiManager = new UIManager;

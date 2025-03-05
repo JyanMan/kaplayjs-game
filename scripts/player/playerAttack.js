@@ -13,9 +13,9 @@ export function playerShoot(player) {
     const direction = normalizeVec(mousePosWithCam().sub(playerPos));
 
     const width = 5;
-    const speed = 1000;
-    const maxReach = 300;
-    const damage = 1;
+    const speed = 1500;
+    const maxReach = 400;
+    const damage = 3;
     const knockStrength = 50;
     let isDestroyed = false;
     let alreadyHit = false;

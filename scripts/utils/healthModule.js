@@ -27,6 +27,10 @@ export function isHit(entity, damage, attacker) {
         for (const child of entity.gameObj.children) {
             entity.gameObj.destroy(child);
         }
+        if (entity.gameObj.is('player')) {
+            go('defeat');
+            return;
+        }
         destroy(entity.gameObj);
     }
 }

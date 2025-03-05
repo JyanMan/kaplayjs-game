@@ -7,10 +7,10 @@ import { generateLevel2Entities } from "./level2Entities.js";
 
 export const levelTwo = () => {
 
-    const player = new Player(200, 0, 20)
     
     function start() {
         
+        const player = new Player(77, 500, 20)
         const level = new Level(2);
         level.drawBackground(4);
         level.drawMapLayout(level2Layout, levelMappings);

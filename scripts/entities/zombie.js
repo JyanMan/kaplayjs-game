@@ -76,8 +76,8 @@ class Zombie {
 
         this.gameObj.onUpdate(() => {
             this.animation();
-            drawObjArea(this.gameObj);
-            drawObjCenter(this.gameObj, GREEN);
+            // drawObjArea(this.gameObj);
+            // drawObjCenter(this.gameObj, GREEN);
         }) 
         this.gameObj.onFixedUpdate(() => {
             this.move();

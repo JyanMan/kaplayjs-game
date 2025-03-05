@@ -33,6 +33,8 @@ class Bat {
 
         this.health = health
         this.objDestroyed = false;
+
+        this.makeBat();
     }
     
     makeBat() {
