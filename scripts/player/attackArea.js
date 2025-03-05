@@ -1,3 +1,4 @@
+import { drawObjArea } from "../utils/debugDraw.js";
 import { vec2Product } from "../utils/vector2.js";
 
 class AttackArea {
@@ -31,28 +32,10 @@ class AttackArea {
         ])
 
         onUpdate(() => {
+            //drawObjArea(this.gameObj, this.colliderColor);
             //this.draw();
            // console.log(this.attacker.attackRadius);
         }) 
-    }
-    draw() {
-        if (!this.gameObj) {
-            return;
-        }
-        const obj = this.gameObj;
-        const objVertices = obj.worldArea().pts
-        drawPolygon({
-            pts: [
-                objVertices[0],
-                objVertices[1],
-                objVertices[2],
-                objVertices[3],
-            ],
-            z: 10,
-            pos: vec2(0, 0),
-            color: this.colliderColor,
-            layer: "ui"
-        })
     }
 
     attack(direction, targets) {

@@ -2,13 +2,10 @@ import AttackArea from "../player/attackArea.js";
 import { isHit } from "../utils/healthModule.js";
 import { withinRadius } from "../utils/enemyLogic.js";
 import { normalizeVec } from "../utils/vector2.js";
+import { drawObjArea, drawObjCenter } from "../utils/debugDraw.js";
 
 class Zombie {
-    constructor(
-        initialX, 
-        initialY,
-        health
-    ) {
+    constructor(initialX, initialY, health) {
         this.pos = vec2(initialX, initialY);
         this.speed = 100;
         this.speedTypes = [40, 50, 60, 90]
@@ -79,43 +76,12 @@ class Zombie {
 
         this.gameObj.onUpdate(() => {
             this.animation();
-            this.draw();
+            drawObjArea(this.gameObj);
+            drawObjCenter(this.gameObj, GREEN);
         }) 
         this.gameObj.onFixedUpdate(() => {
             this.move();
-            //this.attackIfOnRange();
         });
-    }
-
-    draw() {
-        if (!this.gameObj) {
-            return;
-        }
-        const obj = this.gameObj;
-        const objVertices = obj.worldArea().pts
-        drawPolygon({
-            pts: [
-                objVertices[0],
-                objVertices[1],
-                objVertices[2],
-                objVertices[3],
-            ],
-            z: 10,
-            pos: vec2(0, 0),
-            color: YELLOW,
-            layer: "ui"
-        })
-        // const obj = this.gameObj;
-        // drawRect({
-        //     width: this.width*obj.scale.x,
-        //     height: this.height*obj.scale.y,
-        //     pos: this.gameObj.pos.add(
-        //         (this.width/2 + obj.area.offset.x)*obj.scale.x,
-        //         (this.height/2+obj.area.offset.y)*obj.scale.y
-        //     ),
-        //     color: YELLOW,
-        //     fill: true
-        // })
     }
 
     move() {

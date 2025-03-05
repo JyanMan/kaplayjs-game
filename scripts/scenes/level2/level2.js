@@ -18,11 +18,9 @@ export const levelTwo = () => {
         
         generateLevel2Entities();
         level.onCheckLevelFinished(player);
-    }
-    
-    onUpdate(() => {
+
         cameraAttach(player);
-    });
+    }
     
     setGravity(1600);
     start();

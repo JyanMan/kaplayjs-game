@@ -1,4 +1,4 @@
-import { getCenterPos, mousePosWithCam, normalizeVec, vec2Product } from "../utils/vector2.js";
+import { mousePosWithCam, normalizeVec, vec2Product } from "../utils/vector2.js";
 
 export function playerHasGun(player) {
     player.gameObj.add([
@@ -69,7 +69,7 @@ export function playerShoot(player) {
 
 function playerBounce(player) {
     const force = 400;
-    const direction = normalizeVec(getCenterPos(player).sub(mousePosWithCam()));
+    const direction = normalizeVec(player.gameObj.pos.sub(mousePosWithCam()));
     
     //player.moveX = 0;
     player.moveX = direction.x*force;
@@ -77,13 +77,9 @@ function playerBounce(player) {
 }
 
 export function playerSword(player) {
-    player.moveX = 0;
-        
-    const selfCenter = getCenterPos(player);
-    const mouseDir = normalizeVec(mousePosWithCam().sub(player.gameObj.pos)); //Math.sign(mousePosWithCam().x - selfCenter.x);
-        
+    const mouseDir = normalizeVec(mousePosWithCam().sub(player.gameObj.pos));
     const targets = get("enemy");
     player.attackArea.attack(mouseDir, targets);
-
+    player.moveX = 0;
     player.gameObj.vel = vec2(Math.sign(mouseDir.x)*50, 0);
 }

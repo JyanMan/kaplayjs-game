@@ -1,20 +1,14 @@
-import { vec2Product } from "../utils/vector2.js";
-import { normalizeVec } from "../utils/vector2.js";
-import { getCenterPos } from "../utils/vector2.js";
+import { mousePosWithCam, vec2Product, normalizeVec } from "../utils/vector2.js";
 import { isHit } from "../utils/healthModule.js";
-import { mousePosWithCam } from "../utils/vector2.js";
 import { playerShoot, playerSword } from "./playerAttack.js";
 import { checkForPickups } from "./playerInventory.js";
+import { drawObjArea, drawObjCenter } from "../utils/debugDraw.js";
 import AttackArea from "./attackArea.js";
 import HealthBar from "./playerHealthBar.js";
 import DodgeBar from "./playerDodgeBar.js";
 
 class Player {
-    constructor(
-        initialX,
-        initialY,
-        health
-    ) {
+    constructor(initialX, initialY, health) {
         this.pos = vec2(initialX, initialY);
         this.width = 10;
         this.height = 19;
@@ -28,7 +22,7 @@ class Player {
         this.jumpForce = 700;
         this.jumped = false;
         
-        this.dodgingTime = 0.1;
+        this.dodgeDuration = 0.1;
         this.dodgeRadius = 150;
         this.dodgeMin = 80;
         this.dodgeSlowTime = 0.2;
@@ -57,8 +51,6 @@ class Player {
         this.animState = "idle";
         this.faceRight = false;
         this.faceMouse = true;
-
-        this.objDestroyed = false;
     }
     
     makePlayer() {
@@ -66,8 +58,6 @@ class Player {
             sprite("player", { anim: this.animState }),
             scale(4),
             pos(this.pos),
-            //FIX THIS AREA, ITS NOT PROPERLY OFFSET
-            //COULD FIX SPRITESHEET INSTEAD
             area({ 
                 shape: new Rect(vec2(0,0), this.width, this.height),
                 offset: vec2(0, 6),
@@ -101,11 +91,6 @@ class Player {
             this.dodgeBar.initialize();
 
             checkForPickups(this);
-            // this.gameObj.onCollide((obj) => {
-            //     if (obj.tags.includes('end-crystal')) {
-            //         this.finishLevel();
-            //     }
-            // })
         }
         start();
         
@@ -113,38 +98,13 @@ class Player {
             this.playerInput();
             this.playerAnimate();
             this.changeFaceDirection();
+            //drawObjArea(this.gameObj);
+            //drawObjCenter(this.gameObj, WHITE);
         });
         this.gameObj.onFixedUpdate(() => {
             //this.playerMove();
             this.action();
         });
-    }
-
-    draw() {
-        if (!this.gameObj) {
-            return;
-        }
-        const obj = this.gameObj;
-        const objVertices = obj.worldArea().pts
-        drawPolygon({
-            pts: [
-                objVertices[0],
-                objVertices[1],
-                objVertices[2],
-                objVertices[3],
-            ],
-            z: 10,
-            pos: vec2(0, 0),
-            color: YELLOW,
-            layer: "ui"
-        })
-
-        //draw the center
-        drawCircle({
-            pos: getCenterPos(this),
-            radius: 10,
-            color: GREEN 
-        })
     }
 
     playerInput() {
@@ -269,7 +229,7 @@ class Player {
         }
 
         this.dodged = true;
-        wait(this.dodgingTime, () => { //name this dodge duration
+        wait(this.dodgeDuration, () => { //name this dodge duration
             this.slowAfterDodge = true; //player stay on air for few secs
             this.dodged = false; 
             //this.gameObj.vel = vec2Product(this.gameObj.vel, 0.3);
@@ -351,7 +311,7 @@ class Player {
         if (this.attacking) {
             if (this.faceMouse) {
                 this.faceMouse = false;
-                const mouseDirX = Math.sign(mousePosWithCam().x - getCenterPos(this).x);
+                const mouseDirX = Math.sign(mousePosWithCam().x - this.gameObj.pos.x);
                 this.faceRight = (mouseDirX === 1) ? true : false;
                 this.runDirection = mouseDirX;
             }

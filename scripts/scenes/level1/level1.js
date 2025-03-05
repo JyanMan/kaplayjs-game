@@ -11,17 +11,14 @@ export const levelOne = () => {
     function start() {
         
         const level = new Level(1);
-        level.drawBackground(4);
+        //level.drawBackground(4);
         level.drawMapLayout(level1Layout, levelMappings);
         player.makePlayer();
         generateLevel1Entities();
 
         level.onCheckLevelFinished(player);
-    }
-    
-    onUpdate(() => {
         cameraAttach(player);
-    });
+    }
     
     setGravity(1600);
     start();
