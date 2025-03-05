@@ -26,7 +26,7 @@ export const load = {
         });
         loadSprite('enemy-bat', '../assets/mr-platformer/Enemies/Enemy-Bat-Fly-32x32.png', {
             sliceX: 2,
-            sliceY: 6,
+            sliceY: 3,
             anims: {
                 fly: { from: 0, to: 4, loop: true }
             }

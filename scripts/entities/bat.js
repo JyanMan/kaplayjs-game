@@ -1,5 +1,7 @@
+import AttackArea from '../player/attackArea.js';
 import { withinRadius } from '../utils/enemyLogic.js';
 import { isHit } from '../utils/healthModule.js';
+import { normalizeVec, vec2Product } from '../utils/vector2.js';
 
 class Bat {
     constructor(x, y, health) {
@@ -7,22 +9,30 @@ class Bat {
 
         this.followRange = 600;
         
-        this.speed = 100;
+        this.speed = 150;
         this.accel = this.speed/10;
 
         this.moving = false;
         this.moveX = 0;
+        this.moveDirection = 1;
+        this.scale = 4;
 
         this.onBounceFly = false;
         this.onBounceFlyCd = 0.2;
-        
         this.jumpForce = 300;
 
         this.attackDamage = 2;
-        this.attackCooldown = 0.2;
+        this.attackCooldown = 0.5;
         this.onAttackCooldown = false;
+        this.attackRadius = 10;
+        this.attackDuration = 0.2;
+
+        this.faceRight = false;
+
+        this.knocked = false;
 
         this.health = health
+        this.objDestroyed = false;
     }
     
     makeBat() {
@@ -33,29 +43,33 @@ class Bat {
             anchor('center'),
             area({
                 shape: new Rect(vec2(0,0), 10, 10),
-                collisionIgnore: ['enemy']
+                collisionIgnore: ['enemy'],
+                offset: vec2(0, 0)
             }),
             body(),
             color(WHITE),
             'bat', 'enemy',
             {
-                // attackDamage: this.attackDamage,
-                // attackRadius: this.attackRadius*0.25,
-                // attackDuration: this.attackDuration,
+                attackDamage: this.attackDamage,
                 knockStrength: 100,
-                attackDuration: this.attackCooldown,
                 isHit: (entity, damage, attacker) => isHit(this, damage, attacker)
             },
             offscreen({ hide: true }),
         ]);
+
+        const start = () => {
+            this.gameObj.mass = 0.5;
+        }
         
-        onUpdate(() => {
-            this.draw();
+        this.gameObj.onUpdate(() => {
+            //this.draw();
             //console.log(this.gameObj.pos);
         })
-        onFixedUpdate(() => {
+        this.gameObj.onFixedUpdate(() => {
             this.followPlayer();
+            this.changeFaceDirection();
         })
+        start();
     }
     draw() {
         if (!this.gameObj) {
@@ -75,57 +89,50 @@ class Bat {
             color: YELLOW,
             layer: "ui"
         })
-        // const obj = this.gameObj;
-        // drawRect({
-        //     width: this.width*obj.scale.x,
-        //     height: this.height*obj.scale.y,
-        //     pos: this.gameObj.pos.add(
-        //         (this.width/2 + obj.area.offset.x)*obj.scale.x,
-        //         (this.height/2+obj.area.offset.y)*obj.scale.y
-        //     ),
-        //     color: YELLOW,
-        //     fill: true
-        // })
     }
 
     followPlayer() {
+        if (this.knocked) {
+            this.moveX = 0;
+            return;
+        }
         const player = get("player")[0];
         this.gameObj.vel = vec2(this.moveX, this.gameObj.vel.y);
-
         //if not within radius or player does not exist
         if (!player || !withinRadius(this.gameObj, player, this.followRange)) {
             this.moving = false;
             this.moveX = 0;
             return;
         }
+        const distanceToPlayer = player.pos.sub(this.gameObj.pos);
+
         //attack on collide
-        if (this.gameObj.isColliding(player)) {
+        console.log(distanceToPlayer.len()*this.gameObj.scale.x);
+        if (distanceToPlayer.len() <= this.attackRadius*this.gameObj.scale.x) {
             //console.log("00000");
             this.attack(player);
         }
-
-        // if (distanceToPlayer.len() <= this.attackRadius) {
-            //     this.attack();
-            // }
-            
-        const distanceToPlayer = player.pos.sub(this.gameObj.pos);
+        
         this.onFlyLogic(distanceToPlayer.y);
 
         this.moving = true;
 
         //move to player
-        this.moveX += Math.sign(distanceToPlayer.x)*this.accel;
+        this.moveDirection = Math.sign(distanceToPlayer.x);
+        this.moveX += this.moveDirection*this.accel;
         if (Math.abs(this.moveX) >= this.speed) {
             this.moveX = Math.sign(this.moveX)*this.speed;        
         }
     }
 
     onFlyLogic(distanceY) {
+        
         if (this.onBounceFly) {
             return;
         }
+        const heightDistance = 10;
         this.setBounceCooldown();
-        if (distanceY < 0) {
+        if (distanceY < heightDistance) {
             this.gameObj.jump(this.jumpForce);
         }
     }
@@ -137,6 +144,9 @@ class Bat {
     }
 
     attack(player) {
+        // console.log("happenin");
+        // const direction = normalizeVec(player.pos.sub(this.gameObj.pos));
+        // this.attackArea.attack(direction, player);
         if (this.onAttackCooldown) {
             return;
         }
@@ -146,6 +156,11 @@ class Bat {
         wait(this.attackCooldown, () => {
             this.onAttackCooldown = false;
         })
+    }
+
+    changeFaceDirection() {
+        this.faceRight = (this.moveDirection === 1) ? true : false;
+        this.gameObj.flipX = (this.faceRight) ? true : false;
     }
 }
 

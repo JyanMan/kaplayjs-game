@@ -40,8 +40,6 @@ class Zombie {
         this.health = health;
         this.makeZombie();
 
-        this.objDestroyed = false
-
     }
 
     makeZombie() {
@@ -79,13 +77,11 @@ class Zombie {
         }
         this.start();
 
-        onUpdate(() => {
-            if (this.objDestroyed) return;
+        this.gameObj.onUpdate(() => {
             this.animation();
             this.draw();
         }) 
-        onFixedUpdate(() => {
-            if (this.objDestroyed) return;
+        this.gameObj.onFixedUpdate(() => {
             this.move();
             //this.attackIfOnRange();
         });

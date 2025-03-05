@@ -12,7 +12,7 @@ export const levelTwo = () => {
     function start() {
         
         const level = new Level(2);
-        //level.drawBackground(4);
+        level.drawBackground(4);
         level.drawMapLayout(level2Layout, levelMappings);
         player.makePlayer();
         

@@ -48,7 +48,7 @@ export function playerShoot(player) {
     //check for bullet collisions
     bullet.onCollide((obj) => {
         isDestroyed = true;
-        if (obj.tags.includes("zombie") && !alreadyHit) {
+        if (obj.tags.includes("enemy") && !alreadyHit) {
             alreadyHit = true;
             obj.isHit(0, damage, bullet)
         }

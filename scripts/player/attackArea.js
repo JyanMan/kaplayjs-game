@@ -31,7 +31,7 @@ class AttackArea {
         ])
 
         onUpdate(() => {
-            this.draw();
+            //this.draw();
            // console.log(this.attacker.attackRadius);
         }) 
     }

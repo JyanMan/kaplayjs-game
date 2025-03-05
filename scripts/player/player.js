@@ -107,38 +107,18 @@ class Player {
         }
         start();
         
-        onUpdate(() => {
+        this.gameObj.onUpdate(() => {
             this.playerInput();
             this.playerAnimate();
             this.changeFaceDirection();
-            //console.log(get('end-crystal'));
-            //console.log(fps());
-            
-
-            //console.log(this.dodgeAmount, this.dodgeAmountMax);
-            //for debuggin collider
-            this.draw();
-            //console.log(this.gameObj.tag);
         });
-        onFixedUpdate(() => {
+        this.gameObj.onFixedUpdate(() => {
             //this.playerMove();
             this.action();
         });
     }
 
     draw() {
-        // const obj = this.gameObj;
-        // drawRect({
-        //     width: this.width*obj.scale.x,
-        //     height: this.height*obj.scale.y,
-        //     pos: obj.pos.sub(vec2(0, 6*4)),
-        //     // pos: this.gameObj.pos.add(
-        //     //     (this.width/2 + obj.area.offset.x)*obj.scale.x,
-        //     //     (this.height/2+obj.area.offset.y)*obj.scale.y
-        //     // ),
-        //     color: YELLOW,
-        //     fill: true
-        // })
         if (!this.gameObj) {
             return;
         }
