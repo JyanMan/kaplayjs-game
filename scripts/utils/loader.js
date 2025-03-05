@@ -13,6 +13,14 @@ export const load = {
                 attack: { from: 16, to: 19, loop: false, speed: 15 }
             }
         });
+        loadSprite('gun', '../assets/player/gun-spritesheet.png', {
+            sliceX: 3,
+            sliceY: 1,
+            anims: {
+                idle: 0,
+                shoot: { from: 1, to: 2, loop: false}
+            }
+        });
         loadSprite("zombie", '../assets/zombie.png', {
             sliceX: 4,
             sliceY: 4,

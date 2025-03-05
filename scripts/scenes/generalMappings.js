@@ -61,6 +61,13 @@ function generateMappings(tiletype) {
             layer("object"),
             area(),
             "end-crystal"
+        ],
+        'g': () => [
+            sprite('gun', { anim: 'idle' }),
+            offscreen({ hide: true }),
+            layer("object"),
+            area(),
+            'unowned-gun'
         ]
     }
 }

@@ -1,5 +1,12 @@
 import { getCenterPos, mousePosWithCam, normalizeVec, vec2Product } from "../utils/vector2.js";
 
+export function playerHasGun(player) {
+    player.gameObj.add([
+        sprite('gun', { anim: 'idle '}),
+        'owned-gun'
+    ])
+}
+
 export function playerShoot(player) {
 
     const playerPos = player.gameObj.pos;

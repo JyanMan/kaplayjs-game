@@ -13,8 +13,8 @@ class DodgeBar {
             this.dodgies.push(add([
                 sprite("dodgy"),
                 fixed(),
-                pos(gap*i, gap),
-                scale(2),
+                pos(gap*i, 20),
+                scale(4),
                 color(WHITE),
                 z(1)
             ]))

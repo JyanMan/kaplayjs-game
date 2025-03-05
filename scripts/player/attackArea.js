@@ -63,8 +63,6 @@ class AttackArea {
         this.attacking = true;
         this.setTimer(this.attacker.attackDuration);
         this.colliderColor = GREEN;
-        console.log(direction);
-
         this.gameObj.pos = vec2Product(direction, this.radius/2) //vec2(this.radius*direction/2, 0)
         // this.gameObj.pos = vec2Product(direction, this.radius/2) //vec2(this.radius*direction/2, 0)
         // .add(

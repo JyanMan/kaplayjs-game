@@ -4,6 +4,7 @@ import { getCenterPos } from "../utils/vector2.js";
 import { isHit } from "../utils/healthModule.js";
 import { mousePosWithCam } from "../utils/vector2.js";
 import { playerShoot, playerSword } from "./playerAttack.js";
+import { checkForPickups } from "./playerInventory.js";
 import AttackArea from "./attackArea.js";
 import HealthBar from "./playerHealthBar.js";
 import DodgeBar from "./playerDodgeBar.js";
@@ -99,6 +100,7 @@ class Player {
             this.dodgeBar = new DodgeBar(this);
             this.dodgeBar.initialize();
 
+            checkForPickups(this);
             // this.gameObj.onCollide((obj) => {
             //     if (obj.tags.includes('end-crystal')) {
             //         this.finishLevel();
@@ -152,7 +154,7 @@ class Player {
     ) {
             this.startDodge();
         }
-        if (isButtonPressed("shoot") && !this.onShootCooldown) {
+        if (isButtonPressed("shoot") && this.ownedGun && !this.onShootCooldown) {
             this.shot = true;
         }
 

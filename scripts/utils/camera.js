@@ -7,5 +7,4 @@ export function getCamLeftEnd() {
 export function cameraAttach(obj) {
     const pos = getCamPos().lerp(obj.gameObj.pos, 0.05);
     setCamPos(pos);
-    // setCamPos(obj.gameObj.pos);
 }

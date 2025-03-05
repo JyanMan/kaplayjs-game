@@ -107,7 +107,6 @@ class Bat {
         const distanceToPlayer = player.pos.sub(this.gameObj.pos);
 
         //attack on collide
-        console.log(distanceToPlayer.len()*this.gameObj.scale.x);
         if (distanceToPlayer.len() <= this.attackRadius*this.gameObj.scale.x) {
             //console.log("00000");
             this.attack(player);
